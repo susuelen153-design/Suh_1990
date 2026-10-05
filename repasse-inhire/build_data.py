@@ -11,6 +11,13 @@ MANUAL = "https://drive.google.com/file/d/19x416s7mUmxWs2ARTMga5m1RzBaG8huX/view
 INDICACAO = "https://drive.google.com/file/d/1p92SYhUJW0iSi7IKYZc9DwLgAq4t2YPp/view"
 GUPY = "https://docs.google.com/spreadsheets/d/1P8T1nctioHdNWqfhKaIlwD-fsDWVgiOgNpdBD180BF8/edit"
 
+TIPOS = {"p0":"Gestão do repasse","p1":"Implantação do sistema","p3":"Implantação do sistema","p2":"Comunicação e marca",
+         "p4":"Capacitação e documentação","p5":"Capacitação e documentação","p6":"Programas de atração"}
+
+# Situação no repasse, na ordem das tarefas: A=Atualizar (existe, precisa revisar), M=Manter (repassa como está), C=Criar (não existe), V=A avaliar
+SITUACAO = "CCCCC" + "AAAAAAAAAAAAAC" + "MACAC" + "ACCC" + "ACCVC" + "CCCAMC" + "V"
+SIT = {"A":"Atualizar","M":"Manter","C":"Criar","V":"A avaliar"}
+
 projects = [
     ("p0", "Transição e governança do repasse", "Organizar quem assume o quê, acessos e comunicação da saída."),
     ("p1", "Base final preenchida (importação)", "Planilha de Importação v4 com a InHire (Diego Guedes): LOTE 1 vagas abertas/congeladas, LOTE 2 fechadas/canceladas e talentos contratados."),
@@ -18,6 +25,7 @@ projects = [
     ("p3", "Cartas proposta", "Modelos de carta proposta no InHire por tipo de contratação, com campos dinâmicos e aprovação."),
     ("p4", "Material de treinamento", "Treinamentos para lideranças, time de R&S e Programa de Indicação."),
     ("p5", "Documentação InHire", "Guia de processos, governança, SLAs e contatos para manter a operação sem a dona atual."),
+    ("p6", "Delta", "Programa de estágio. Escopo, etapas e entregáveis a detalhar com quem conduz o programa."),
 ]
 
 # (projeto, seção, título, status, prioridade, entregável, link, notas)
@@ -72,23 +80,28 @@ T = [
  ("p5","Governança","Dicionário de campos personalizados (requisição e vaga)","A fazer","Média","Dicionário publicado",PLANILHA,"Base: aba 'Mapeamento de Campos' da Planilha v4."),
  ("p5","Governança","Registrar dores da Gupy e como o InHire resolve cada uma","A fazer","Baixa","Quadro comparativo",GUPY,"Planilha 'Banco Daycoval e Gupy – Mapeamento de melhorias'."),
  ("p5","Contatos","Registrar contatos, suporte e rotinas com a InHire","A fazer","Média","Página de contatos","","Implantação: Diego Guedes. Materiais/CS: Isabela Britto."),
+
+ # P6 – Delta (estágio)
+ ("p6","Levantamento","Levantar o status do Programa Delta e registrar etapas e entregáveis pendentes","A fazer","Alta","Tarefas do Delta detalhadas neste quadro","","Cronograma, turma atual, gestores, processo seletivo, efetivações e cota."),
 ]
 
 tasks = []
 order = {}
 for i,(p,sec,title,status,prio,deliv,link,notes) in enumerate(T):
     order[p] = order.get(p,0)+1
-    tasks.append(dict(id=f"t{i+1:02d}", project=p, section=sec, title=title, status=status, priority=prio,
+    tasks.append(dict(id=f"t{i+1:02d}", project=p, section=sec, title=title, status=status, handover=SIT[SITUACAO[i]], doneAt="", priority=prio,
                       owner=ATUAL, successor=SUC, due="", deliverable=deliv, link=link, notes=notes, order=order[p]))
 
-proj = [dict(id=pid, name=n, desc=d, order=k) for k,(pid,n,d) in enumerate(projects)]
+assert len(SITUACAO) == len(T)
+proj = [dict(id=pid, name=n, type=TIPOS[pid], desc=d, order=k) for k,(pid,n,d) in enumerate(projects)]
 (HERE/"tarefas.json").write_text(json.dumps({"projects":proj,"tasks":tasks}, ensure_ascii=False, indent=2))
 
 pname = {p["id"]:p["name"] for p in proj}
+ptype = {p["id"]:p["type"] for p in proj}
 with open(HERE/"asana_import.csv","w",newline="",encoding="utf-8") as f:
     w = csv.writer(f)
-    w.writerow(["Name","Section/Column","Assignee","Due Date","Description","Status","Prioridade","Responsável atual","Sucessor(a)","Entregável","Link"])
+    w.writerow(["Name","Section/Column","Tipo de projeto","Assignee","Due Date","Description","Status","Situação no repasse","Concluída em","Prioridade","Responsável atual","Sucessor(a)","Entregável","Link"])
     for t in tasks:
         desc = f"Entregável: {t['deliverable']}\n{t['notes']}" + (f"\nLink: {t['link']}" if t['link'] else "")
-        w.writerow([t["title"], f"{pname[t['project']]} · {t['section']}", "", t["due"], desc, t["status"], t["priority"], t["owner"], t["successor"], t["deliverable"], t["link"]])
+        w.writerow([t["title"], f"{pname[t['project']]} · {t['section']}", ptype[t["project"]], "", t["due"], desc, t["status"], t["handover"], t["doneAt"], t["priority"], t["owner"], t["successor"], t["deliverable"], t["link"]])
 print(len(proj), "projetos,", len(tasks), "tarefas")

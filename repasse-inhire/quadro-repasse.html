@@ -2,30 +2,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Layout: cabeçalho com resumo → barra de filtros → visão (Lista por projeto / Quadro por status / Responsáveis) → gaveta lateral de edição */
+/* Tema escuro único. Layout: cabeçalho com resumo → barra de filtros → visão (Projetos por tipo / Lista / Quadro por status / Responsáveis) → gaveta lateral de edição */
 :root{
-  --bg:#f5f7f6; --surface:#ffffff; --sunk:#eaefed; --line:#d7dfdc; --ink:#14201d; --muted:#5b6b66;
-  --accent:#0d6b5f; --accent-soft:#d9efe9; --accent-ink:#ffffff;
-  --todo:#64748b; --doing:#1d63c9; --block:#c2410c; --done:#15803d;
-  --todo-bg:#eef1f5; --doing-bg:#e3edfb; --block-bg:#fdebe1; --done-bg:#e2f4e8;
-  --high:#b42318; --mid:#a15c07; --low:#5b6b66;
-  --shadow:0 10px 30px rgba(15,40,35,.14);
+  --bg:#0e1513; --surface:#151f1c; --sunk:#1b2824; --line:#2a3a35; --ink:#e4ece9; --muted:#93a59f;
+  --accent:#4fc1ad; --accent-soft:#173a33; --accent-ink:#06201b;
+  --todo:#9aa8bb; --doing:#7fb0ff; --block:#ff9a62; --done:#5fd08a;
+  --todo-bg:#202a33; --doing-bg:#172a45; --block-bg:#3a2216; --done-bg:#15301f;
+  --high:#ff8a7a; --mid:#f0b45a; --low:#93a59f; --shadow:0 10px 30px rgba(0,0,0,.55);
+  --t1:#b79bff; --t2:#4fc1ad; --t3:#f0b45a; --t4:#7fb0ff; --t5:#ff8fb8; --t6:#a9d46f;
   --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0f1715; --surface:#16211e; --sunk:#1c2a26; --line:#2a3a35; --ink:#e4ece9; --muted:#93a59f;
-  --accent:#4fc1ad; --accent-soft:#173a33; --accent-ink:#06201b;
-  --todo:#9aa8bb; --doing:#7fb0ff; --block:#ff9a62; --done:#5fd08a;
-  --todo-bg:#202a33; --doing-bg:#172a45; --block-bg:#3a2216; --done-bg:#15301f;
-  --high:#ff8a7a; --mid:#f0b45a; --low:#93a59f; --shadow:0 10px 30px rgba(0,0,0,.5); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0f1715; --surface:#16211e; --sunk:#1c2a26; --line:#2a3a35; --ink:#e4ece9; --muted:#93a59f;
-  --accent:#4fc1ad; --accent-soft:#173a33; --accent-ink:#06201b;
-  --todo:#9aa8bb; --doing:#7fb0ff; --block:#ff9a62; --done:#5fd08a;
-  --todo-bg:#202a33; --doing-bg:#172a45; --block-bg:#3a2216; --done-bg:#15301f;
-  --high:#ff8a7a; --mid:#f0b45a; --low:#93a59f; --shadow:0 10px 30px rgba(0,0,0,.5); color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);padding-inline:16px;padding-block:20px 48px}
 .wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
@@ -44,6 +33,7 @@ button{cursor:pointer}
 .stat span{color:var(--muted);font-size:13px}
 .stat.warn b{color:var(--block)}
 button.stat:hover{border-color:var(--accent)}
+.projbars[hidden]{display:none}
 .projbars{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 18px}
 .pb{display:flex;flex-direction:column;gap:4px;font-size:13px;min-width:0}
 .pb .row{display:flex;justify-content:space-between;gap:8px}
@@ -71,12 +61,36 @@ button.stat:hover{border-color:var(--accent)}
 .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
 .s-todo{color:var(--todo);background:var(--todo-bg)} .s-doing{color:var(--doing);background:var(--doing-bg)}
 .s-block{color:var(--block);background:var(--block-bg)} .s-done{color:var(--done);background:var(--done-bg)}
+.h-upd{color:var(--mid);background:#3a2c12} .h-keep{color:var(--done);background:var(--done-bg)} .h-new{color:var(--doing);background:var(--doing-bg)} .h-eval{color:var(--todo);background:var(--todo-bg)}
+.due.ok{color:var(--done)}
+.measure{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+.measure table{min-width:760px}
+.measure td.pc{min-width:140px}
+.measure .mini{display:flex;align-items:center;gap:8px}
+.measure .mini .bar{flex:1;min-width:60px}
+.measure tfoot td{font-weight:600;border-bottom:0}
 .prio{font:500 12px var(--f-mono);letter-spacing:.02em}
 .prio.Alta{color:var(--high)} .prio.Média{color:var(--mid)} .prio.Baixa{color:var(--low)}
 .who{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .who.none{color:var(--block);font-style:italic}
 .due{font:500 12px var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
 .due.late{color:var(--high)}
+
+/* projetos por tipo */
+.tgroup{display:flex;flex-direction:column;gap:10px}
+.thead{display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.thead h2{font-size:20px;color:var(--tc)}
+.thead span{color:var(--muted);font-size:13px}
+.tchip{font:500 11px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.07em;color:var(--tc)}
+.dir{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--tc);border-radius:10px;padding:14px 16px;text-align:left;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pcard:hover{border-color:var(--tc)}
+.pcard h3{font-size:20px;line-height:1.2}
+.pcard p{margin:0;color:var(--muted);font-size:13px}
+.pcard .nums{display:flex;gap:14px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.pcard .nums b{color:var(--ink);font-variant-numeric:tabular-nums}
+.pcard .nums b.w{color:var(--block)}
+.stack{display:flex;flex-direction:column;gap:22px}
 
 /* lista */
 .project{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
@@ -86,7 +100,7 @@ button.stat:hover{border-color:var(--accent)}
 .phead p{margin:2px 0 0;color:var(--muted);font-size:13px;max-width:80ch}
 .section-label{font:500 11px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:12px 16px 6px;background:var(--sunk)}
 .scroll{overflow-x:auto}
-.trow{display:grid;grid-template-columns:28px minmax(240px,1fr) 150px 120px 64px 92px;gap:10px;align-items:center;padding:9px 16px;border-top:1px solid var(--line);min-width:720px}
+.trow{display:grid;grid-template-columns:28px minmax(240px,1fr) 150px 120px 96px 56px 92px;gap:10px;align-items:center;padding:9px 16px;border-top:1px solid var(--line);min-width:830px}
 .trow:first-child{border-top:0}
 .trow.head{font:500 11px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--surface);border-top:0;padding-block:8px}
 .trow:not(.head):hover{background:var(--sunk)}
@@ -146,17 +160,20 @@ td.n .z{color:var(--line)}
   </header>
 
   <section class="summary" id="summary" aria-label="Resumo"></section>
-  <section class="projbars" id="projbars" aria-label="Progresso por projeto"></section>
+  
 
   <div class="toolbar" role="toolbar" aria-label="Filtros e visões">
     <div class="tabs" role="group" aria-label="Visão">
-      <button id="tab-list" data-view="list" aria-pressed="true">Lista</button>
+      <button id="tab-projects" data-view="projects" aria-pressed="true">Projetos</button>
+      <button id="tab-list" data-view="list" aria-pressed="false">Lista</button>
       <button id="tab-board" data-view="board" aria-pressed="false">Quadro</button>
       <button id="tab-people" data-view="people" aria-pressed="false">Responsáveis</button>
     </div>
+    <select id="f-type" aria-label="Filtrar por tipo de projeto"></select>
     <select id="f-project" aria-label="Filtrar por projeto"></select>
     <select id="f-person" aria-label="Filtrar por sucessor(a)"></select>
     <select id="f-status" aria-label="Filtrar por status"></select>
+    <select id="f-hand" aria-label="Filtrar por situação no repasse"></select>
     <input id="f-q" type="search" placeholder="Buscar tarefa, nota ou entregável" aria-label="Buscar">
     <label class="chk"><input id="f-open" type="checkbox"> Só pendentes</label>
     <span class="spacer"></span>
@@ -176,13 +193,21 @@ td.n .z{color:var(--line)}
 <script>
 const STATUSES=[["A fazer","s-todo"],["Em andamento","s-doing"],["Bloqueado","s-block"],["Concluído","s-done"]];
 const PRIOS=["Alta","Média","Baixa"];
+const HAND=[["Atualizar","h-upd","Existe, mas precisa de atualização antes do repasse"],["Manter","h-keep","Está pronto: repassar como está"],["Criar","h-new","Ainda não existe: precisa ser feito"],["A avaliar","h-eval","Falta decidir"]];
+const HC=Object.fromEntries(HAND.map(h=>[h[0],h[1]]));
 const SC=Object.fromEntries(STATUSES);
 const NONE="__none__";
-const state={projects:[],tasks:[],view:"list",fp:"",fperson:"",fs:"",q:"",open:false,canWrite:true,db:null};
+const state={projects:[],tasks:[],view:"projects",ft:"",fp:"",fperson:"",fs:"",fh:"",q:"",open:false,canWrite:true,db:null};
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const today=()=>new Date().toISOString().slice(0,10);
 const fmtDate=d=>d?d.split("-").reverse().join("/"):"";
+const TYPE_ORDER=["Gestão do repasse","Implantação do sistema","Programas de atração","Comunicação e marca","Capacitação e documentação"];
+const ptype=p=>(p&&p.type)||"Outros";
+const types=()=>{const ts=[...new Set(state.projects.map(ptype))];return ts.sort((a,b)=>((TYPE_ORDER.indexOf(a)+1)||99)-((TYPE_ORDER.indexOf(b)+1)||99)||a.localeCompare(b))};
+const tcolor=t=>{const i=types().indexOf(t);return `var(--t${(i%6)+1})`};
+const sortP=(a,b)=>((types().indexOf(ptype(a)))-(types().indexOf(ptype(b))))||a.order-b.order;
+const visProjects=()=>[...state.projects].sort(sortP).filter(p=>(!state.ft||ptype(p)===state.ft)&&(!state.fp||p.id===state.fp));
 const pname=id=>(state.projects.find(p=>p.id===id)||{}).name||"Sem projeto";
 
 try{const v=localStorage.getItem("repasse-view");if(v)state.view=v}catch(e){}
@@ -193,9 +218,11 @@ function filtered(){
   const q=state.q.trim().toLowerCase();
   return state.tasks.filter(t=>{
     if(state.fp&&t.project!==state.fp)return false;
+    if(state.ft&&ptype(state.projects.find(p=>p.id===t.project))!==state.ft)return false;
     if(state.fperson===NONE&&t.successor)return false;
     if(state.fperson&&state.fperson!==NONE&&t.successor!==state.fperson)return false;
     if(state.fs&&t.status!==state.fs)return false;
+    if(state.fh&&(t.handover||"A avaliar")!==state.fh)return false;
     if(state.open&&t.status==="Concluído")return false;
     if(q&&!(t.title+" "+t.notes+" "+t.deliverable+" "+t.section).toLowerCase().includes(q))return false;
     return true;
@@ -210,33 +237,66 @@ function renderSummary(){
   const s=[
     ["Pendentes",open.length,"",()=>{state.open=true;state.fs="";state.fperson=""}],
     ["Sem sucessor(a)",open.filter(t=>!t.successor).length,"warn",()=>{state.fperson=NONE;state.open=true}],
+    ["Precisam de atualização",open.filter(t=>t.handover==="Atualizar").length,"",()=>{state.fh="Atualizar";state.open=true;state.view="list"}],
     ["Bloqueadas",T.filter(t=>t.status==="Bloqueado").length,"warn",()=>{state.fs="Bloqueado";state.open=false}],
     ["Atrasadas",late,"warn",()=>{state.open=true}],
-    ["Concluídas",T.filter(t=>t.status==="Concluído").length+" / "+T.length,"",()=>{state.fs="Concluído";state.open=false}],
+    ["Concluídas",T.filter(t=>t.status==="Concluído").length+" / "+T.length,"",()=>{state.fs="Concluído";state.open=false;state.view="list"}],
   ];
   $("#summary").innerHTML=s.map((x,i)=>`<button class="stat ${x[2]&&+x[1]>0?x[2]:""}" data-i="${i}"><b>${x[1]}</b><span>${x[0]}</span></button>`).join("");
   $("#summary").querySelectorAll("button").forEach(b=>b.onclick=()=>{s[b.dataset.i][3]();syncFilters();render()});
-  $("#projbars").innerHTML=[...state.projects].sort((a,b)=>a.order-b.order).map(p=>{
-    const pt=T.filter(t=>t.project===p.id),d=pt.filter(t=>t.status==="Concluído").length,pc=pt.length?Math.round(d/pt.length*100):0;
-    return `<div class="pb"><div class="row"><span>${esc(p.name)}</span><span>${d}/${pt.length}</span></div><div class="bar"><i style="width:${pc}%"></i></div></div>`}).join("");
 }
 
 function syncFilters(){
-  const ps=[...state.projects].sort((a,b)=>a.order-b.order);
+  $("#f-type").innerHTML=`<option value="">Todos os tipos</option>`+types().map(t=>`<option>${esc(t)}</option>`).join("");
+  const ps=[...state.projects].sort(sortP).filter(p=>!state.ft||ptype(p)===state.ft);
+  if(state.fp&&!ps.some(p=>p.id===state.fp))state.fp="";
   $("#f-project").innerHTML=`<option value="">Todos os projetos</option>`+ps.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("");
   $("#f-person").innerHTML=`<option value="">Todos os sucessores</option><option value="${NONE}">Sem sucessor(a)</option>`+people().map(p=>`<option>${esc(p)}</option>`).join("");
   $("#f-status").innerHTML=`<option value="">Todos os status</option>`+STATUSES.map(s=>`<option>${s[0]}</option>`).join("");
-  $("#f-project").value=state.fp;$("#f-person").value=state.fperson;$("#f-status").value=state.fs;$("#f-q").value=state.q;$("#f-open").checked=state.open;
+  $("#f-hand").innerHTML=`<option value="">Atualizar, manter ou criar</option>`+HAND.map(h=>`<option>${h[0]}</option>`).join("");
+  $("#f-type").value=state.ft;$("#f-project").value=state.fp;$("#f-person").value=state.fperson;$("#f-status").value=state.fs;$("#f-hand").value=state.fh;$("#f-q").value=state.q;$("#f-open").checked=state.open;
   document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.view===state.view));
 }
 
 const tickSvg='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 6.5l2.2 2.2L9.5 3.8"/></svg>';
 function whoHTML(t){return t.successor?`<span class="who" title="Atual: ${esc(t.owner)}">${esc(t.successor)}</span>`:`<span class="who none">Definir sucessor(a)</span>`}
-function dueHTML(t){return t.due?`<span class="due ${t.due<today()&&t.status!=="Concluído"?"late":""}">${fmtDate(t.due)}</span>`:`<span class="due">—</span>`}
+function handHTML(t){const h=t.handover||"A avaliar";return `<span><span class="pill ${HC[h]||"h-eval"}" title="${esc((HAND.find(x=>x[0]===h)||[])[2]||"")}">${esc(h)}</span></span>`}
+function dueHTML(t){if(t.status==="Concluído")return `<span class="due ok" title="Concluída em">${t.doneAt?"✓ "+fmtDate(t.doneAt):"✓"}</span>`;return t.due?`<span class="due ${t.due<today()&&t.status!=="Concluído"?"late":""}">${fmtDate(t.due)}</span>`:`<span class="due">—</span>`}
+
+function projStats(p){
+  const pt=state.tasks.filter(t=>t.project===p.id),open=pt.filter(t=>t.status!=="Concluído");
+  return {total:pt.length,done:pt.length-open.length,open:open.length,nosucc:open.filter(t=>!t.successor).length,block:pt.filter(t=>t.status==="Bloqueado").length,
+    who:[...new Set(pt.map(t=>t.successor).filter(Boolean))]};
+}
+function byType(ps,fn){
+  return types().filter(t=>ps.some(p=>ptype(p)===t)).map(t=>{const g=ps.filter(p=>ptype(p)===t);
+    return `<section class="tgroup" style="--tc:${tcolor(t)}"><div class="thead"><h2>${esc(t)}</h2><span>${g.length} projeto${g.length>1?"s":""}</span></div>${fn(g)}</section>`}).join("");
+}
+function renderMeasure(ps){
+  const ids=new Set(ps.map(p=>p.id)), T=state.tasks.filter(t=>ids.has(t.project));
+  const wk=new Date(Date.now()-7*864e5).toISOString().slice(0,10);
+  const row=(label,ts,color)=>{const d=ts.filter(t=>t.status==="Concluído").length,pc=ts.length?Math.round(d/ts.length*100):0,c=h=>ts.filter(t=>(t.handover||"A avaliar")===h&&t.status!=="Concluído").length;
+    return `<td>${label}</td><td class="n">${ts.length}</td><td class="n">${d}</td><td class="pc"><span class="mini"><span class="bar"><i style="width:${pc}%;background:${color}"></i></span>${pc}%</span></td>
+      <td class="n">${ts.filter(t=>t.doneAt&&t.doneAt>=wk).length}</td><td class="n">${c("Atualizar")}</td><td class="n">${c("Manter")}</td><td class="n">${c("Criar")}</td><td class="n">${c("A avaliar")}</td>`};
+  const tl=types().filter(t=>ps.some(p=>ptype(p)===t));
+  return `<div class="measure"><table><thead><tr><th>Medição por tipo</th><th>Tarefas</th><th>Concluídas</th><th>% concluído</th><th>Últimos 7 dias</th><th>Atualizar</th><th>Manter</th><th>Criar</th><th>A avaliar</th></tr></thead>
+    <tbody>${tl.map(t=>`<tr>${row(`<span style="color:${tcolor(t)}">${esc(t)}</span>`,T.filter(x=>ptype(state.projects.find(p=>p.id===x.project))===t),tcolor(t))}</tr>`).join("")}</tbody>
+    <tfoot><tr>${row("Total",T,"var(--accent)")}</tr></tfoot></table></div>
+    <p class="notice" style="margin-top:-12px">Concluídas continuam no quadro com a data de conclusão. As colunas Atualizar/Manter/Criar contam só o que ainda está pendente.</p>`;
+}
+function renderProjects(){
+  const ps=visProjects();
+  if(!ps.length)return `<div class="empty">Nenhum projeto com esses filtros.</div>`;
+  return `<div class="stack">${renderMeasure(ps)}${byType(ps,g=>`<div class="dir">${g.map(p=>{const k=projStats(p),pc=k.total?Math.round(k.done/k.total*100):0;
+    return `<button class="pcard" data-goto="${esc(p.id)}"><span class="tchip">${esc(ptype(p))}</span><h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p>
+      <div class="bar"><i style="width:${pc}%;background:var(--tc)"></i></div>
+      <span class="nums"><span><b>${k.done}/${k.total}</b> concluídas</span><span><b>${k.open}</b> pendentes</span><span><b class="${k.nosucc?"w":""}">${k.nosucc}</b> sem sucessor(a)</span></span>
+      <span class="nums">${k.who.length?"Sucessor(es): "+esc(k.who.join(", ")):"Sucessor(a) ainda não definido(a)"}</span></button>`}).join("")}</div>`)}</div>`;
+}
 
 function renderList(list){
-  const ps=[...state.projects].sort((a,b)=>a.order-b.order).filter(p=>!state.fp||p.id===state.fp);
-  const out=ps.map(p=>{
+  const ps=visProjects();
+  const one=p=>{
     const pt=list.filter(t=>t.project===p.id).sort(sortT);
     if(!pt.length&&(state.q||state.fperson||state.fs||state.open))return "";
     const secs=[...new Set(pt.map(t=>t.section||"Geral"))];
@@ -246,15 +306,17 @@ function renderList(list){
         <button class="tt" data-open="${esc(t.id)}"><strong>${esc(t.title)}</strong><small>${esc(t.deliverable||t.notes)}</small></button>
         ${whoHTML(t)}
         <span><span class="pill ${SC[t.status]||"s-todo"}">${esc(t.status)}</span></span>
+        ${handHTML(t)}
         <span class="prio ${esc(t.priority)}">${esc(t.priority)}</span>
         ${dueHTML(t)}
       </div>`).join("")).join("");
     return `<section class="project">
-      <div class="phead"><div><h2>${esc(p.name)}</h2><p>${esc(p.desc)}</p></div>
+      <div class="phead"><div><span class="tchip">${esc(ptype(p))}</span><h2>${esc(p.name)}</h2><p>${esc(p.desc)}</p></div>
       <div style="display:flex;gap:6px"><button class="btn" data-addin="${esc(p.id)}" ${state.canWrite?"":"disabled"}>+ Tarefa</button><button class="btn" data-editp="${esc(p.id)}" ${state.canWrite?"":"disabled"}>Editar</button></div></div>
-      <div class="scroll"><div class="trow head"><span></span><span>Tarefa · entregável</span><span>Sucessor(a)</span><span>Status</span><span>Prior.</span><span>Prazo</span></div>
+      <div class="scroll"><div class="trow head"><span></span><span>Tarefa · entregável</span><span>Sucessor(a)</span><span>Status</span><span>Repasse</span><span>Prior.</span><span>Prazo</span></div>
       ${rows||`<div class="trow"><span></span><span class="notice">Nenhuma tarefa ainda.</span></div>`}</div></section>`;
-  }).join("");
+  };
+  const out=byType(ps,g=>g.map(one).join(""));
   return out||`<div class="empty">Nenhuma tarefa com esses filtros.</div>`;
 }
 
@@ -263,11 +325,11 @@ function renderBoard(list){
     const ts=list.filter(t=>t.status===s).sort((a,b)=>PRIOS.indexOf(a.priority)-PRIOS.indexOf(b.priority)||sortT(a,b));
     return `<div class="col"><h3><span class="pill ${c}">${s}</span><span class="notice">${ts.length}</span></h3>
       ${ts.map(t=>`<button class="card" data-open="${esc(t.id)}"><span class="proj">${esc(pname(t.project))}</span><span>${esc(t.title)}</span>
-      <span class="meta">${whoHTML(t)}<span class="prio ${esc(t.priority)}">${esc(t.priority)}</span></span></button>`).join("")||`<span class="notice" style="padding:4px">Vazio</span>`}</div>`}).join("")}</div>`;
+      <span class="meta">${whoHTML(t)}<span class="pill ${HC[t.handover||"A avaliar"]}">${esc(t.handover||"A avaliar")}</span></span></button>`).join("")||`<span class="notice" style="padding:4px">Vazio</span>`}</div>`}).join("")}</div>`;
 }
 
 function renderPeople(list){
-  const ps=[...state.projects].sort((a,b)=>a.order-b.order);
+  const ps=visProjects();
   const open=list.filter(t=>t.status!=="Concluído");
   const names=[...people(),NONE];
   const rows=names.map(n=>{
@@ -275,7 +337,8 @@ function renderPeople(list){
     if(!mine.length&&n!==NONE)return "";
     return `<tr class="${n===NONE?"person-none":""}"><td>${n===NONE?"Sem sucessor(a)":esc(n)}</td>${ps.map(p=>{const k=mine.filter(t=>t.project===p.id).length;
       return `<td class="n">${k?`<button data-pf="${esc(p.id)}" data-pp="${esc(n)}">${k}</button>`:`<span class="z">·</span>`}</td>`}).join("")}<td class="n"><b>${mine.length}</b></td></tr>`}).join("");
-  return `<div class="matrix"><table><thead><tr><th>Sucessor(a)</th>${ps.map(p=>`<th>${esc(p.name)}</th>`).join("")}<th>Total</th></tr></thead><tbody>${rows}</tbody></table></div>
+  return `<div class="matrix"><table><thead><tr><th></th>${types().filter(t=>ps.some(p=>ptype(p)===t)).map(t=>`<th colspan="${ps.filter(p=>ptype(p)===t).length}" style="color:${tcolor(t)}">${esc(t)}</th>`).join("")}<th></th></tr>
+  <tr><th>Sucessor(a)</th>${ps.map(p=>`<th>${esc(p.name)}</th>`).join("")}<th>Total</th></tr></thead><tbody>${rows}</tbody></table></div>
   <p class="notice">Tarefas pendentes por pessoa e projeto. Clique num número para ver a lista filtrada.</p>`;
 }
 
@@ -284,7 +347,7 @@ function render(){
   const list=filtered();
   const v=$("#view");
   if(!state.tasks.length&&!state.projects.length){v.innerHTML=`<div class="empty">O quadro está vazio. Use “+ Projeto” para criar o primeiro projeto e depois “+ Tarefa”.</div>`;return}
-  v.innerHTML=state.view==="board"?renderBoard(list):state.view==="people"?renderPeople(list):renderList(list);
+  v.innerHTML=state.view==="projects"?renderProjects():state.view==="board"?renderBoard(list):state.view==="people"?renderPeople(list):renderList(list);
 }
 
 /* gaveta */
@@ -304,6 +367,7 @@ function taskForm(t,isNew){
       <div class="field"><label for="t-project">Projeto</label><select id="t-project" ${ro}>${projOpts}</select></div>
       <div class="field"><label for="t-section">Seção</label><input id="t-section" list="t-seclist" value="${esc(t.section)}" ${ro}><datalist id="t-seclist">${secs.map(s=>`<option value="${esc(s)}">`).join("")}</datalist></div>
       <div class="field"><label for="t-status">Status</label><select id="t-status" ${ro}>${STATUSES.map(s=>`<option ${s[0]===t.status?"selected":""}>${s[0]}</option>`).join("")}</select></div>
+      <div class="field"><label for="t-hand">Situação no repasse</label><select id="t-hand" ${ro}>${HAND.map(h=>`<option value="${h[0]}" ${h[0]===(t.handover||"A avaliar")?"selected":""}>${h[0]} · ${h[2]}</option>`).join("")}</select></div>
       <div class="field"><label for="t-prio">Prioridade</label><select id="t-prio" ${ro}>${PRIOS.map(s=>`<option ${s===t.priority?"selected":""}>${s}</option>`).join("")}</select></div>
       <div class="field"><label for="t-owner">Responsável atual</label><input id="t-owner" value="${esc(t.owner)}" ${ro}></div>
       <div class="field"><label for="t-succ">Sucessor(a)</label><input id="t-succ" list="t-plist" placeholder="Quem assume" value="${esc(t.successor)}" ${ro}><datalist id="t-plist">${people().map(p=>`<option value="${esc(p)}">`).join("")}</datalist></div>
@@ -321,10 +385,12 @@ function taskForm(t,isNew){
   $("#tform").onsubmit=e=>{e.preventDefault();$("#d-save").click()};
   $("#d-save").onclick=async()=>{
     const title=$("#t-title").value.trim(); if(!title){$("#d-msg").textContent="Dê um nome à tarefa.";return}
-    const body={...t,title,project:$("#t-project").value,section:$("#t-section").value.trim(),status:$("#t-status").value,priority:$("#t-prio").value,
+    const body={...t,title,project:$("#t-project").value,section:$("#t-section").value.trim(),status:$("#t-status").value,handover:$("#t-hand").value,priority:$("#t-prio").value,
       owner:$("#t-owner").value.trim(),successor:$("#t-succ").value.trim(),due:$("#t-due").value,link:$("#t-link").value.trim(),
       deliverable:$("#t-deliv").value.trim(),notes:$("#t-notes").value,updatedAt:new Date().toISOString()};
     delete body.id;
+    if(body.status==="Concluído"&&!body.doneAt)body.doneAt=today();
+    if(body.status!=="Concluído")body.doneAt="";
     if(isNew)body.order=Math.max(0,...state.tasks.filter(x=>x.project===body.project).map(x=>x.order||0))+1;
     $("#d-save").disabled=true;
     try{await state.db.collection("tasks").doc(t.id).set(body);closeDrawer();toast(isNew?"Tarefa criada":"Tarefa salva")}
@@ -342,6 +408,7 @@ function projectForm(p,isNew){
   openDrawer(`<div class="dhead"><h2 id="d-title" style="font-size:18px">${isNew?"Novo projeto":"Projeto"}</h2><button class="btn" id="d-close">Fechar</button></div>
   <form class="dbody" id="pform">
     <div class="field"><label for="p-name">Nome do projeto</label><input id="p-name" required value="${esc(p.name)}" ${ro}></div>
+    <div class="field"><label for="p-type">Tipo de projeto</label><input id="p-type" list="p-tlist" value="${esc(p.type||"")}" placeholder="Ex.: Programas de atração" ${ro}><datalist id="p-tlist">${[...new Set([...TYPE_ORDER,...types()])].map(t=>`<option value="${esc(t)}">`).join("")}</datalist></div>
     <div class="field"><label for="p-desc">Descrição e escopo</label><textarea id="p-desc" ${ro}>${esc(p.desc)}</textarea></div>
   </form>
   <div class="dfoot"><span class="msg" id="d-msg"></span><button class="btn primary" id="d-save" ${ro}>Salvar</button></div>`);
@@ -349,7 +416,7 @@ function projectForm(p,isNew){
   $("#pform").onsubmit=e=>{e.preventDefault();$("#d-save").click()};
   $("#d-save").onclick=async()=>{
     const name=$("#p-name").value.trim(); if(!name){$("#d-msg").textContent="Dê um nome ao projeto.";return}
-    const body={name,desc:$("#p-desc").value.trim(),order:isNew?Math.max(-1,...state.projects.map(x=>x.order))+1:p.order};
+    const body={name,type:$("#p-type").value.trim()||"Outros",desc:$("#p-desc").value.trim(),order:isNew?Math.max(-1,...state.projects.map(x=>x.order))+1:p.order};
     try{await state.db.collection("projects").doc(p.id).set(body);closeDrawer();toast("Projeto salvo")}catch(err){$("#d-msg").textContent=writeErr(err)}
   };
 }
@@ -363,23 +430,26 @@ const newId=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
 /* eventos */
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{state.view=b.dataset.view;try{localStorage.setItem("repasse-view",state.view)}catch(e){}syncFilters();render()});
+$("#f-type").onchange=e=>{state.ft=e.target.value;syncFilters();render()};
 $("#f-project").onchange=e=>{state.fp=e.target.value;render()};
 $("#f-person").onchange=e=>{state.fperson=e.target.value;render()};
 $("#f-status").onchange=e=>{state.fs=e.target.value;render()};
+$("#f-hand").onchange=e=>{state.fh=e.target.value;render()};
 $("#f-q").oninput=e=>{state.q=e.target.value;render()};
 $("#f-open").onchange=e=>{state.open=e.target.checked;render()};
-$("#btn-task").onclick=()=>{if(!state.projects.length){projectForm({id:newId("p"),name:"",desc:""},true);return}
-  taskForm({id:newId("t"),project:state.fp||[...state.projects].sort((a,b)=>a.order-b.order)[0].id,section:"",title:"",status:"A fazer",priority:"Média",owner:"Suellen Pereira da Silva",successor:"",due:"",link:"",deliverable:"",notes:""},true)};
-$("#btn-proj").onclick=()=>projectForm({id:newId("p"),name:"",desc:""},true);
+$("#btn-task").onclick=()=>{if(!state.projects.length){projectForm({id:newId("p"),name:"",type:state.ft,desc:""},true);return}
+  taskForm({id:newId("t"),project:state.fp||visProjects().concat([...state.projects].sort(sortP))[0].id,section:"",title:"",status:"A fazer",handover:"A avaliar",priority:"Média",owner:"Suellen Pereira da Silva",successor:"",due:"",link:"",deliverable:"",notes:""},true)};
+$("#btn-proj").onclick=()=>projectForm({id:newId("p"),name:"",type:state.ft,desc:""},true);
 $("#view").addEventListener("click",async e=>{
+  const g=e.target.closest("[data-goto]"); if(g){state.fp=g.dataset.goto;state.view="list";try{localStorage.setItem("repasse-view","list")}catch(x){}syncFilters();render();window.scrollTo({top:0});return}
   const o=e.target.closest("[data-open]"); if(o){const t=state.tasks.find(x=>x.id===o.dataset.open);t&&taskForm(t,false);return}
-  const a=e.target.closest("[data-addin]"); if(a){taskForm({id:newId("t"),project:a.dataset.addin,section:"",title:"",status:"A fazer",priority:"Média",owner:"Suellen Pereira da Silva",successor:"",due:"",link:"",deliverable:"",notes:""},true);return}
+  const a=e.target.closest("[data-addin]"); if(a){taskForm({id:newId("t"),project:a.dataset.addin,section:"",title:"",status:"A fazer",handover:"A avaliar",priority:"Média",owner:"Suellen Pereira da Silva",successor:"",due:"",link:"",deliverable:"",notes:""},true);return}
   const ep=e.target.closest("[data-editp]"); if(ep){const p=state.projects.find(x=>x.id===ep.dataset.editp);p&&projectForm(p,false);return}
   const pf=e.target.closest("[data-pf]"); if(pf){state.fp=pf.dataset.pf;state.fperson=pf.dataset.pp;state.open=true;state.view="list";syncFilters();render();return}
   const tk=e.target.closest("[data-tick]"); if(tk&&state.canWrite){
     const t=state.tasks.find(x=>x.id===tk.dataset.tick); if(!t)return;
     const status=t.status==="Concluído"?"A fazer":"Concluído"; tk.disabled=true;
-    try{await state.db.collection("tasks").doc(t.id).update({status,updatedAt:new Date().toISOString()});toast(status==="Concluído"?"Concluída":"Reaberta")}
+    try{await state.db.collection("tasks").doc(t.id).update({status,doneAt:status==="Concluído"?today():"",updatedAt:new Date().toISOString()});toast(status==="Concluído"?"Concluída":"Reaberta")}
     catch(err){toast(writeErr(err))} finally{tk.disabled=false}
   }
 });
@@ -387,9 +457,9 @@ $("#view").addEventListener("click",async e=>{
 /* exportação CSV para importar no Asana */
 function csv(){
   const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
-  const head=["Name","Section/Column","Assignee","Due Date","Description","Status","Prioridade","Responsável atual","Sucessor(a)","Entregável","Link"];
-  const rows=[...state.tasks].sort((a,b)=>{const pa=state.projects.find(p=>p.id===a.project),pb=state.projects.find(p=>p.id===b.project);return((pa?.order??99)-(pb?.order??99))||sortT(a,b)})
-    .map(t=>[t.title,pname(t.project)+" · "+(t.section||"Geral"),"",t.due,`Entregável: ${t.deliverable}\n${t.notes}${t.link?"\nLink: "+t.link:""}`,t.status,t.priority,t.owner,t.successor,t.deliverable,t.link].map(q).join(","));
+  const head=["Name","Section/Column","Tipo de projeto","Assignee","Due Date","Description","Status","Situação no repasse","Concluída em","Prioridade","Responsável atual","Sucessor(a)","Entregável","Link"];
+  const rows=[...state.tasks].sort((a,b)=>{const pa=state.projects.find(p=>p.id===a.project),pb=state.projects.find(p=>p.id===b.project);return(pa&&pb?sortP(pa,pb):0)||sortT(a,b)})
+    .map(t=>[t.title,pname(t.project)+" · "+(t.section||"Geral"),ptype(state.projects.find(p=>p.id===t.project)),"",t.due,`Entregável: ${t.deliverable}\n${t.notes}${t.link?"\nLink: "+t.link:""}`,t.status,t.handover||"A avaliar",t.doneAt||"",t.priority,t.owner,t.successor,t.deliverable,t.link].map(q).join(","));
   return "﻿"+[head.map(q).join(","),...rows].join("\r\n");
 }
 

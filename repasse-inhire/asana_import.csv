@@ -1,98 +1,100 @@
-Name,Section/Column,Assignee,Due Date,Description,Status,Prioridade,Responsável atual,Sucessor(a),Entregável,Link
-"Definir sucessor(a) para cada frente (base, página, cartas, treinamento, documentação)",Transição e governança do repasse · Pessoas,,,"Entregável: Matriz de responsáveis preenchida neste quadro
-Preencher o campo Sucessor(a) em cada tarefa. Filtro 'Sem sucessor' mostra o que falta.",A fazer,Alta,Suellen Pereira da Silva,,Matriz de responsáveis preenchida neste quadro,
-Reunião de kickoff do repasse com o time de R&S,Transição e governança do repasse · Pessoas,,,"Entregável: Ata com responsáveis e datas
-Apresentar este quadro, combinar rotina de acompanhamento semanal até a data de saída.",A fazer,Alta,Suellen Pereira da Silva,,Ata com responsáveis e datas,
-Agendar passagem de bastão com a InHire (Diego Guedes / Isabela Britto),Transição e governança do repasse · Parceiros,,,"Entregável: Reunião realizada e novo ponto focal informado à InHire
-diego.guedes@inhire.com.br (implantação/importação) · isabela.britto@inhire.com.br (materiais).",A fazer,Alta,Suellen Pereira da Silva,,Reunião realizada e novo ponto focal informado à InHire,
-Transferir acessos e propriedade de arquivos,Transição e governança do repasse · Acessos,,,"Entregável: Novo(a) admin no InHire; arquivos do Drive transferidos
-Perfil admin InHire, pastas de fotos, planilhas, formulários e materiais. Conferir quem é editor da Planilha v4.",A fazer,Alta,Suellen Pereira da Silva,,Novo(a) admin no InHire; arquivos do Drive transferidos,
-Comunicar Heads e gestores sobre o novo ponto focal de R&S/InHire,Transição e governança do repasse · Comunicação,,,"Entregável: E-mail enviado aos Heads de cada empresa
-Usar a lista de Heads da aba 'Opções de resposta em lista'.",A fazer,Média,Suellen Pereira da Silva,,E-mail enviado aos Heads de cada empresa,
-Preencher 'Gestor Imediato' (coluna G),Base final preenchida (importação) · LOTE 1 · Vagas abertas/congeladas,,,"Entregável: Coluna G completa, nomes iguais à lista de opções
+Name,Section/Column,Tipo de projeto,Assignee,Due Date,Description,Status,Situação no repasse,Concluída em,Prioridade,Responsável atual,Sucessor(a),Entregável,Link
+"Definir sucessor(a) para cada frente (base, página, cartas, treinamento, documentação)",Transição e governança do repasse · Pessoas,Gestão do repasse,,,"Entregável: Matriz de responsáveis preenchida neste quadro
+Preencher o campo Sucessor(a) em cada tarefa. Filtro 'Sem sucessor' mostra o que falta.",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Matriz de responsáveis preenchida neste quadro,
+Reunião de kickoff do repasse com o time de R&S,Transição e governança do repasse · Pessoas,Gestão do repasse,,,"Entregável: Ata com responsáveis e datas
+Apresentar este quadro, combinar rotina de acompanhamento semanal até a data de saída.",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Ata com responsáveis e datas,
+Agendar passagem de bastão com a InHire (Diego Guedes / Isabela Britto),Transição e governança do repasse · Parceiros,Gestão do repasse,,,"Entregável: Reunião realizada e novo ponto focal informado à InHire
+diego.guedes@inhire.com.br (implantação/importação) · isabela.britto@inhire.com.br (materiais).",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Reunião realizada e novo ponto focal informado à InHire,
+Transferir acessos e propriedade de arquivos,Transição e governança do repasse · Acessos,Gestão do repasse,,,"Entregável: Novo(a) admin no InHire; arquivos do Drive transferidos
+Perfil admin InHire, pastas de fotos, planilhas, formulários e materiais. Conferir quem é editor da Planilha v4.",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Novo(a) admin no InHire; arquivos do Drive transferidos,
+Comunicar Heads e gestores sobre o novo ponto focal de R&S/InHire,Transição e governança do repasse · Comunicação,Gestão do repasse,,,"Entregável: E-mail enviado aos Heads de cada empresa
+Usar a lista de Heads da aba 'Opções de resposta em lista'.",A fazer,Criar,,Média,Suellen Pereira da Silva,,E-mail enviado aos Heads de cada empresa,
+Preencher 'Gestor Imediato' (coluna G),Base final preenchida (importação) · LOTE 1 · Vagas abertas/congeladas,Implantação do sistema,,,"Entregável: Coluna G completa, nomes iguais à lista de opções
 Comentário do Diego (30/09): inserir gestor imediato. Corrigir quebras de linha nos nomes (ex.: ADILSON NONATO DO NASCIMENTO).
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Alta,Suellen Pereira da Silva,,"Coluna G completa, nomes iguais à lista de opções",https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Revisar 'Tipo de Contratação' (coluna AC) marcada como pendente,Base final preenchida (importação) · LOTE 1 · Vagas abertas/congeladas,,,"Entregável: Coluna AC validada
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Alta,Suellen Pereira da Silva,,"Coluna G completa, nomes iguais à lista de opções",https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Revisar 'Tipo de Contratação' (coluna AC) marcada como pendente,Base final preenchida (importação) · LOTE 1 · Vagas abertas/congeladas,Implantação do sistema,,,"Entregável: Coluna AC validada
 Opções: CLT, PJ, Contrato temporário, Associado, Autônomo, Cooperado, Estágio, Menor aprendiz.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Alta,Suellen Pereira da Silva,,Coluna AC validada,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Completar 'Descritivo da Vaga' (coluna AS) e 'Nome externo de divulgação',Base final preenchida (importação) · LOTE 1 · Vagas abertas/congeladas,,,"Entregável: Descritivos preenchidos ou N/A justificado
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Alta,Suellen Pereira da Silva,,Coluna AC validada,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Completar 'Descritivo da Vaga' (coluna AS) e 'Nome externo de divulgação',Base final preenchida (importação) · LOTE 1 · Vagas abertas/congeladas,Implantação do sistema,,,"Entregável: Descritivos preenchidos ou N/A justificado
 Diego sinalizou a coluna AS (30/09). Hoje há links do gupy.io que vão expirar com a migração.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Média,Suellen Pereira da Silva,,Descritivos preenchidos ou N/A justificado,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Informar a escala da vaga 10222 (Assist. Crédito em Conta – IFP Uberaba),Base final preenchida (importação) · LOTE 1 · Vagas abertas/congeladas,,,"Entregável: Escala preenchida conforme lista (F32, F57...)
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Média,Suellen Pereira da Silva,,Descritivos preenchidos ou N/A justificado,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Informar a escala da vaga 10222 (Assist. Crédito em Conta – IFP Uberaba),Base final preenchida (importação) · LOTE 1 · Vagas abertas/congeladas,Implantação do sistema,,,"Entregável: Escala preenchida conforme lista (F32, F57...)
 Comentário 'faltou escala' na célula AE4.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Média,Suellen Pereira da Silva,,"Escala preenchida conforme lista (F32, F57...)",https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Validar 'Cliente' e 'Tipo de Contrato' contra as listas de opções,Base final preenchida (importação) · LOTE 1 · Vagas abertas/congeladas,,,"Entregável: Valores padronizados
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Média,Suellen Pereira da Silva,,"Escala preenchida conforme lista (F32, F57...)",https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Validar 'Cliente' e 'Tipo de Contrato' contra as listas de opções,Base final preenchida (importação) · LOTE 1 · Vagas abertas/congeladas,Implantação do sistema,,,"Entregável: Valores padronizados
 Cliente/Squad: Loja, Tecnologia, Corporativo. Hoje o Tipo de Contrato está como 'EFETIVO', que não existe na lista (Contrato determinado/indeterminado).
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Média,Suellen Pereira da Silva,,Valores padronizados,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Corrigir 'Tipo de processo' (coluna AA),Base final preenchida (importação) · LOTE 2 · Fechadas/canceladas,,,"Entregável: Coluna AA com opções válidas
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Média,Suellen Pereira da Silva,,Valores padronizados,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Corrigir 'Tipo de processo' (coluna AA),Base final preenchida (importação) · LOTE 2 · Fechadas/canceladas,Implantação do sistema,,,"Entregável: Coluna AA com opções válidas
 Hoje está 'CLT'. Opções: Recrutamento Interno, Recrutamento Externo, Indicação do Gestor Durante o Processo, Candidato Definido, Efetivação Aprendiz e Estag.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Alta,Suellen Pereira da Silva,,Coluna AA com opções válidas,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Corrigir 'Tipo de movimentação' (coluna AB),Base final preenchida (importação) · LOTE 2 · Fechadas/canceladas,,,"Entregável: Coluna AB com opções válidas
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Alta,Suellen Pereira da Silva,,Coluna AA com opções válidas,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Corrigir 'Tipo de movimentação' (coluna AB),Base final preenchida (importação) · LOTE 2 · Fechadas/canceladas,Implantação do sistema,,,"Entregável: Coluna AB com opções válidas
 Hoje está 'CONTRATO DETERMINADO'. Opções: Admissão de colaborador, Contratação sem vínculo, Recontratação de ex-colaborador, Transferência interna, Movimentação de colaborador, Recrutamento Interno.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Alta,Suellen Pereira da Silva,,Coluna AB com opções válidas,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Identificar colaborador substituído nas vagas de substituição,Base final preenchida (importação) · LOTE 2 · Fechadas/canceladas,,,"Entregável: Campo 'Colaborador Substituído' preenchido
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Alta,Suellen Pereira da Silva,,Coluna AB com opções válidas,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Identificar colaborador substituído nas vagas de substituição,Base final preenchida (importação) · LOTE 2 · Fechadas/canceladas,Implantação do sistema,,,"Entregável: Campo 'Colaborador Substituído' preenchido
 Pergunta aberta do Diego: 'não sabemos quem é a pessoa substituída aqui?'.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Média,Suellen Pereira da Silva,,Campo 'Colaborador Substituído' preenchido,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Confirmar que 'Data Contratação' = data de admissão e replicar nas vagas fechadas,Base final preenchida (importação) · LOTE 2 · Talentos contratados,,,"Entregável: Datas conferidas nas duas abas
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Média,Suellen Pereira da Silva,,Campo 'Colaborador Substituído' preenchido,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Confirmar que 'Data Contratação' = data de admissão e replicar nas vagas fechadas,Base final preenchida (importação) · LOTE 2 · Talentos contratados,Implantação do sistema,,,"Entregável: Datas conferidas nas duas abas
 Comentário na célula M2.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Média,Suellen Pereira da Silva,,Datas conferidas nas duas abas,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Conferir se os IDs batem com a aba 'LOTE 2 – Vagas Fechadas/Canceladas',Base final preenchida (importação) · LOTE 2 · Talentos contratados,,,"Entregável: IDs 100% conciliados
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Média,Suellen Pereira da Silva,,Datas conferidas nas duas abas,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Conferir se os IDs batem com a aba 'LOTE 2 – Vagas Fechadas/Canceladas',Base final preenchida (importação) · LOTE 2 · Talentos contratados,Implantação do sistema,,,"Entregável: IDs 100% conciliados
 Requisito da importação: ID do talento = ID da vaga fechada.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Alta,Suellen Pereira da Silva,,IDs 100% conciliados,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Trocar 'Segmento' por 'Head' usando só o nome da área,Base final preenchida (importação) · Padronização,,,"Entregável: Lista de Heads padronizada
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Alta,Suellen Pereira da Silva,,IDs 100% conciliados,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Trocar 'Segmento' por 'Head' usando só o nome da área,Base final preenchida (importação) · Padronização,Implantação do sistema,,,"Entregável: Lista de Heads padronizada
 Diego: manter só a área (incluir nome de pessoas gera manutenção). Consultar a Thay se dá para tratar a resposta pegando só o que vem depois do '-'. Falta subir a carga de respostas.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",Em andamento,Média,Suellen Pereira da Silva,,Lista de Heads padronizada,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Revisar dados pessoais (CPF) compartilhados na planilha,Base final preenchida (importação) · Padronização,,,"Entregável: Acesso restrito e só os campos necessários à carga
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",Em andamento,Atualizar,,Média,Suellen Pereira da Silva,,Lista de Heads padronizada,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Revisar dados pessoais (CPF) compartilhados na planilha,Base final preenchida (importação) · Padronização,Implantação do sistema,,,"Entregável: Acesso restrito e só os campos necessários à carga
 LGPD: a aba de talentos tem CPF. Limitar editores e apagar após a importação.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Alta,Suellen Pereira da Silva,,Acesso restrito e só os campos necessários à carga,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Consolidar a base final com todas as vagas e enviar à InHire,Base final preenchida (importação) · Entrega,,,"Entregável: Base final preenchida e validada pelo Diego
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Alta,Suellen Pereira da Silva,,Acesso restrito e só os campos necessários à carga,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Consolidar a base final com todas as vagas e enviar à InHire,Base final preenchida (importação) · Entrega,Implantação do sistema,,,"Entregável: Base final preenchida e validada pelo Diego
 Versão vigente: v4 (v2 está obsoleta). Hoje há 3 vagas no LOTE 1 e 5 no LOTE 2; confirmar se é amostra ou o total.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",Em andamento,Alta,Suellen Pereira da Silva,,Base final preenchida e validada pelo Diego,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Validar a carga no InHire após a importação,Base final preenchida (importação) · Entrega,,,"Entregável: Checagem por amostragem sem divergências
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",Em andamento,Atualizar,,Alta,Suellen Pereira da Silva,,Base final preenchida e validada pelo Diego,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Validar a carga no InHire após a importação,Base final preenchida (importação) · Entrega,Implantação do sistema,,,"Entregável: Checagem por amostragem sem divergências
 Conferir requisições, vagas, recrutador, gestor e status no ambiente InHire.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Alta,Suellen Pereira da Silva,,Checagem por amostragem sem divergências,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Selecionar as fotos do RH (setembro/26),Página de carreiras · Conteúdo,,,"Entregável: Fotos escolhidas e tratadas
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Checagem por amostragem sem divergências,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Selecionar as fotos do RH (setembro/26),Página de carreiras · Conteúdo,Comunicação e marca,,,"Entregável: Fotos escolhidas e tratadas
 Pastas 'FOTOS DAYCOVAL - RH SETEMBRO 26' e 'FOTOS' no Drive.
-Link: https://drive.google.com/drive/folders/1LdBZK69yVizn_WxvufqKtcIZsw4NvMR-",Em andamento,Média,Suellen Pereira da Silva,,Fotos escolhidas e tratadas,https://drive.google.com/drive/folders/1LdBZK69yVizn_WxvufqKtcIZsw4NvMR-
-"Revisar textos institucionais (sobre, cultura, benefícios, empresas do grupo)",Página de carreiras · Conteúdo,,,"Entregável: Textos aprovados
-Validar com Marketing/Comunicação.",A fazer,Média,Suellen Pereira da Silva,,Textos aprovados,
-Montar a página de carreiras no InHire,Página de carreiras · Configuração,,,"Entregável: Página publicada em homologação
-Inclui identidade visual, seções e filtros por empresa/área.",A fazer,Alta,Suellen Pereira da Silva,,Página publicada em homologação,
-Substituir links das vagas do gupy.io pelos links do InHire,Página de carreiras · Configuração,,,"Entregável: Links atualizados nos canais (site, LinkedIn)
-Os links atuais de Daycoval, Daycoval Tech e Daycred no gupy.io deixam de funcionar ao desligar a Gupy.",A fazer,Média,Suellen Pereira da Silva,,"Links atualizados nos canais (site, LinkedIn)",
-Aprovação final e publicação da página,Página de carreiras · Aprovação,,,"Entregável: Página no ar
-Aprovação RH + Marketing.",A fazer,Alta,Suellen Pereira da Silva,,Página no ar,
-Redigir modelos de carta proposta por tipo de contratação,Cartas proposta · Modelos,,,"Entregável: Modelos CLT, Estágio e Aprendiz
-Campos dinâmicos: nome, cargo, empresa, salário contratual, escala, data de admissão, benefícios.",Em andamento,Alta,Suellen Pereira da Silva,,"Modelos CLT, Estágio e Aprendiz",
-Validar os modelos com DP e Jurídico,Cartas proposta · Modelos,,,"Entregável: Modelos aprovados
-",A fazer,Alta,Suellen Pereira da Silva,,Modelos aprovados,
-Configurar as cartas no InHire com variáveis e fluxo de aprovação,Cartas proposta · Configuração,,,"Entregável: Modelos ativos no InHire
-Definir quem aprova a proposta antes do envio ao talento.",A fazer,Alta,Suellen Pereira da Silva,,Modelos ativos no InHire,
-Testar o envio de proposta de ponta a ponta,Cartas proposta · Configuração,,,"Entregável: Teste aprovado
-Uma vaga de teste por tipo de contratação.",A fazer,Média,Suellen Pereira da Silva,,Teste aprovado,
-Adaptar o Manual de Lideranças da InHire à realidade Daycoval,Material de treinamento · Lideranças,,,"Entregável: Manual adaptado
+Link: https://drive.google.com/drive/folders/1LdBZK69yVizn_WxvufqKtcIZsw4NvMR-",Em andamento,Manter,,Média,Suellen Pereira da Silva,,Fotos escolhidas e tratadas,https://drive.google.com/drive/folders/1LdBZK69yVizn_WxvufqKtcIZsw4NvMR-
+"Revisar textos institucionais (sobre, cultura, benefícios, empresas do grupo)",Página de carreiras · Conteúdo,Comunicação e marca,,,"Entregável: Textos aprovados
+Validar com Marketing/Comunicação.",A fazer,Atualizar,,Média,Suellen Pereira da Silva,,Textos aprovados,
+Montar a página de carreiras no InHire,Página de carreiras · Configuração,Comunicação e marca,,,"Entregável: Página publicada em homologação
+Inclui identidade visual, seções e filtros por empresa/área.",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Página publicada em homologação,
+Substituir links das vagas do gupy.io pelos links do InHire,Página de carreiras · Configuração,Comunicação e marca,,,"Entregável: Links atualizados nos canais (site, LinkedIn)
+Os links atuais de Daycoval, Daycoval Tech e Daycred no gupy.io deixam de funcionar ao desligar a Gupy.",A fazer,Atualizar,,Média,Suellen Pereira da Silva,,"Links atualizados nos canais (site, LinkedIn)",
+Aprovação final e publicação da página,Página de carreiras · Aprovação,Comunicação e marca,,,"Entregável: Página no ar
+Aprovação RH + Marketing.",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Página no ar,
+Redigir modelos de carta proposta por tipo de contratação,Cartas proposta · Modelos,Implantação do sistema,,,"Entregável: Modelos CLT, Estágio e Aprendiz
+Campos dinâmicos: nome, cargo, empresa, salário contratual, escala, data de admissão, benefícios.",Em andamento,Atualizar,,Alta,Suellen Pereira da Silva,,"Modelos CLT, Estágio e Aprendiz",
+Validar os modelos com DP e Jurídico,Cartas proposta · Modelos,Implantação do sistema,,,"Entregável: Modelos aprovados
+",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Modelos aprovados,
+Configurar as cartas no InHire com variáveis e fluxo de aprovação,Cartas proposta · Configuração,Implantação do sistema,,,"Entregável: Modelos ativos no InHire
+Definir quem aprova a proposta antes do envio ao talento.",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Modelos ativos no InHire,
+Testar o envio de proposta de ponta a ponta,Cartas proposta · Configuração,Implantação do sistema,,,"Entregável: Teste aprovado
+Uma vaga de teste por tipo de contratação.",A fazer,Criar,,Média,Suellen Pereira da Silva,,Teste aprovado,
+Adaptar o Manual de Lideranças da InHire à realidade Daycoval,Material de treinamento · Lideranças,Capacitação e documentação,,,"Entregável: Manual adaptado
 Módulos: visão geral da vaga, o candidato na vaga, Kit Entrevista, Analytics da vaga.
-Link: https://drive.google.com/file/d/19x416s7mUmxWs2ARTMga5m1RzBaG8huX/view",Em andamento,Alta,Suellen Pereira da Silva,,Manual adaptado,https://drive.google.com/file/d/19x416s7mUmxWs2ARTMga5m1RzBaG8huX/view
-Agendar e aplicar o treinamento de gestores,Material de treinamento · Lideranças,,,"Entregável: Turmas realizadas e lista de presença
-Fernanda está desenvolvendo um treinamento para líderes. Alinhar o conteúdo para não duplicar.",A fazer,Alta,Suellen Pereira da Silva,,Turmas realizadas e lista de presença,
-"Treinar o time de R&S no fluxo InHire (etapas, feedback, encerramento)",Material de treinamento · Time de R&S,,,"Entregável: Treinamento aplicado e gravado
-Atacar as dores da Gupy: pular etapas, feedback atrasado, vagas com +90 dias abertas.",A fazer,Alta,Suellen Pereira da Silva,,Treinamento aplicado e gravado,
-Planejar a implantação do Programa de Indicação,Material de treinamento · Programa de Indicação,,,"Entregável: Cronograma e comunicação aos membros internos
+Link: https://drive.google.com/file/d/19x416s7mUmxWs2ARTMga5m1RzBaG8huX/view",Em andamento,Atualizar,,Alta,Suellen Pereira da Silva,,Manual adaptado,https://drive.google.com/file/d/19x416s7mUmxWs2ARTMga5m1RzBaG8huX/view
+Agendar e aplicar o treinamento de gestores,Material de treinamento · Lideranças,Capacitação e documentação,,,"Entregável: Turmas realizadas e lista de presença
+Fernanda está desenvolvendo um treinamento para líderes. Alinhar o conteúdo para não duplicar.",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Turmas realizadas e lista de presença,
+"Treinar o time de R&S no fluxo InHire (etapas, feedback, encerramento)",Material de treinamento · Time de R&S,Capacitação e documentação,,,"Entregável: Treinamento aplicado e gravado
+Atacar as dores da Gupy: pular etapas, feedback atrasado, vagas com +90 dias abertas.",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Treinamento aplicado e gravado,
+Planejar a implantação do Programa de Indicação,Material de treinamento · Programa de Indicação,Capacitação e documentação,,,"Entregável: Cronograma e comunicação aos membros internos
 Material de apoio da InHire para recrutador e membro interno.
-Link: https://drive.google.com/file/d/1p92SYhUJW0iSi7IKYZc9DwLgAq4t2YPp/view",A fazer,Média,Suellen Pereira da Silva,,Cronograma e comunicação aos membros internos,https://drive.google.com/file/d/1p92SYhUJW0iSi7IKYZc9DwLgAq4t2YPp/view
-Centralizar gravações e materiais numa pasta compartilhada,Material de treinamento · Acervo,,,"Entregável: Pasta organizada com link no quadro
-",A fazer,Média,Suellen Pereira da Silva,,Pasta organizada com link no quadro,
-Documentar o fluxo de requisição e aprovação de vagas,Documentação InHire · Processos,,,"Entregável: Fluxo documentado
-Tipos de requisição: aumento de quadro, aumento temporário, substituição. Requisição sigilosa.",A fazer,Alta,Suellen Pereira da Silva,,Fluxo documentado,
-Documentar SLA por nível e regras de encerramento de vagas,Documentação InHire · Processos,,,"Entregável: Política publicada
-Operacionais 20 dias · Analistas/Especialistas 30 dias · Gestão 40 dias.",A fazer,Média,Suellen Pereira da Silva,,Política publicada,
-Mapa de perfis e permissões no InHire,Documentação InHire · Governança,,,"Entregável: Tabela perfil x permissão
-Recrutador, gestor, avaliador, admin, RH.",A fazer,Alta,Suellen Pereira da Silva,,Tabela perfil x permissão,
-Dicionário de campos personalizados (requisição e vaga),Documentação InHire · Governança,,,"Entregável: Dicionário publicado
+Link: https://drive.google.com/file/d/1p92SYhUJW0iSi7IKYZc9DwLgAq4t2YPp/view",A fazer,A avaliar,,Média,Suellen Pereira da Silva,,Cronograma e comunicação aos membros internos,https://drive.google.com/file/d/1p92SYhUJW0iSi7IKYZc9DwLgAq4t2YPp/view
+Centralizar gravações e materiais numa pasta compartilhada,Material de treinamento · Acervo,Capacitação e documentação,,,"Entregável: Pasta organizada com link no quadro
+",A fazer,Criar,,Média,Suellen Pereira da Silva,,Pasta organizada com link no quadro,
+Documentar o fluxo de requisição e aprovação de vagas,Documentação InHire · Processos,Capacitação e documentação,,,"Entregável: Fluxo documentado
+Tipos de requisição: aumento de quadro, aumento temporário, substituição. Requisição sigilosa.",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Fluxo documentado,
+Documentar SLA por nível e regras de encerramento de vagas,Documentação InHire · Processos,Capacitação e documentação,,,"Entregável: Política publicada
+Operacionais 20 dias · Analistas/Especialistas 30 dias · Gestão 40 dias.",A fazer,Criar,,Média,Suellen Pereira da Silva,,Política publicada,
+Mapa de perfis e permissões no InHire,Documentação InHire · Governança,Capacitação e documentação,,,"Entregável: Tabela perfil x permissão
+Recrutador, gestor, avaliador, admin, RH.",A fazer,Criar,,Alta,Suellen Pereira da Silva,,Tabela perfil x permissão,
+Dicionário de campos personalizados (requisição e vaga),Documentação InHire · Governança,Capacitação e documentação,,,"Entregável: Dicionário publicado
 Base: aba 'Mapeamento de Campos' da Planilha v4.
-Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Média,Suellen Pereira da Silva,,Dicionário publicado,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
-Registrar dores da Gupy e como o InHire resolve cada uma,Documentação InHire · Governança,,,"Entregável: Quadro comparativo
+Link: https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit",A fazer,Atualizar,,Média,Suellen Pereira da Silva,,Dicionário publicado,https://docs.google.com/spreadsheets/d/18XiwQr1AXpgs___fAk0nZDhYA5YvfpuokPxGPwHCTSE/edit
+Registrar dores da Gupy e como o InHire resolve cada uma,Documentação InHire · Governança,Capacitação e documentação,,,"Entregável: Quadro comparativo
 Planilha 'Banco Daycoval e Gupy – Mapeamento de melhorias'.
-Link: https://docs.google.com/spreadsheets/d/1P8T1nctioHdNWqfhKaIlwD-fsDWVgiOgNpdBD180BF8/edit",A fazer,Baixa,Suellen Pereira da Silva,,Quadro comparativo,https://docs.google.com/spreadsheets/d/1P8T1nctioHdNWqfhKaIlwD-fsDWVgiOgNpdBD180BF8/edit
-"Registrar contatos, suporte e rotinas com a InHire",Documentação InHire · Contatos,,,"Entregável: Página de contatos
-Implantação: Diego Guedes. Materiais/CS: Isabela Britto.",A fazer,Média,Suellen Pereira da Silva,,Página de contatos,
+Link: https://docs.google.com/spreadsheets/d/1P8T1nctioHdNWqfhKaIlwD-fsDWVgiOgNpdBD180BF8/edit",A fazer,Manter,,Baixa,Suellen Pereira da Silva,,Quadro comparativo,https://docs.google.com/spreadsheets/d/1P8T1nctioHdNWqfhKaIlwD-fsDWVgiOgNpdBD180BF8/edit
+"Registrar contatos, suporte e rotinas com a InHire",Documentação InHire · Contatos,Capacitação e documentação,,,"Entregável: Página de contatos
+Implantação: Diego Guedes. Materiais/CS: Isabela Britto.",A fazer,Criar,,Média,Suellen Pereira da Silva,,Página de contatos,
+Levantar o status do Programa Delta e registrar etapas e entregáveis pendentes,Delta · Levantamento,Programas de atração,,,"Entregável: Tarefas do Delta detalhadas neste quadro
+Cronograma, turma atual, gestores, processo seletivo, efetivações e cota.",A fazer,A avaliar,,Alta,Suellen Pereira da Silva,,Tarefas do Delta detalhadas neste quadro,
