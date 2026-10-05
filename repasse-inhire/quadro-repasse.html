@@ -4,22 +4,24 @@
 <style>
 /* Tema escuro único. Layout: cabeçalho com resumo → barra de filtros → visão (Projetos por tipo / Lista / Quadro por status / Responsáveis) → gaveta lateral de edição */
 :root{
-  --bg:#0e1513; --surface:#151f1c; --sunk:#1b2824; --line:#2a3a35; --ink:#e4ece9; --muted:#93a59f;
-  --accent:#4fc1ad; --accent-soft:#173a33; --accent-ink:#06201b;
-  --todo:#9aa8bb; --doing:#7fb0ff; --block:#ff9a62; --done:#5fd08a;
-  --todo-bg:#202a33; --doing-bg:#172a45; --block-bg:#3a2216; --done-bg:#15301f;
-  --high:#ff8a7a; --mid:#f0b45a; --low:#93a59f; --shadow:0 10px 30px rgba(0,0,0,.55);
-  --t1:#b79bff; --t2:#4fc1ad; --t3:#f0b45a; --t4:#7fb0ff; --t5:#ff8fb8; --t6:#a9d46f;
+  /* paleta do Grupo Daycoval (deck Programa Delta): marinho 203764/1B438B, ciano 00ADEF, fundo 060C24 */
+  --bg:#060c24; --surface:#0f1a3c; --sunk:#16234d; --line:#26386e; --ink:#e8eefb; --muted:#9aa9cc;
+  --accent:#00adef; --accent-soft:#0b3557; --accent-ink:#04122a; --navy:#1b438b;
+  --todo:#a9b6d6; --doing:#4cc6ff; --block:#ff9a62; --done:#5fd08a;
+  --todo-bg:#1a2550; --doing-bg:#0c3159; --block-bg:#3a2216; --done-bg:#12321f;
+  --high:#ff8a7a; --mid:#ffc857; --low:#9aa9cc; --shadow:0 12px 32px rgba(0,0,0,.6);
+  --t1:#00adef; --t2:#6b9bff; --t3:#ffc857; --t4:#7fe0d2; --t5:#ff8fb8; --t6:#a9d46f;
   --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);padding-inline:16px;padding-block:20px 48px}
+body{background:radial-gradient(1200px 500px at 85% -10%,#12306b 0%,transparent 60%),var(--bg);background-attachment:fixed;color:var(--ink);font:15px/1.5 var(--f-body);padding-inline:16px;padding-block:20px 48px}
 .wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
 h1{font-size:clamp(26px,4vw,34px);letter-spacing:-.01em}
+h1 .delta{color:var(--accent)}
 .sub{color:var(--muted);max-width:68ch;margin:4px 0 0}
 .eyebrow{font:500 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 button,select,input,textarea{font:inherit;color:inherit}
@@ -43,7 +45,7 @@ button.stat:hover{border-color:var(--accent)}
 .bar i{display:block;height:100%;background:var(--accent)}
 
 /* barra de ferramentas */
-.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;border-bottom:1px solid var(--line)}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:rgba(6,12,36,.94);backdrop-filter:blur(6px);padding-block:8px;border-bottom:1px solid var(--line)}
 .tabs{display:flex;background:var(--sunk);border-radius:8px;padding:3px}
 .tabs button{border:0;background:none;padding:6px 12px;border-radius:6px;color:var(--muted);font-weight:500}
 .tabs button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
@@ -61,7 +63,7 @@ button.stat:hover{border-color:var(--accent)}
 .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
 .s-todo{color:var(--todo);background:var(--todo-bg)} .s-doing{color:var(--doing);background:var(--doing-bg)}
 .s-block{color:var(--block);background:var(--block-bg)} .s-done{color:var(--done);background:var(--done-bg)}
-.h-upd{color:var(--mid);background:#3a2c12} .h-keep{color:var(--done);background:var(--done-bg)} .h-new{color:var(--doing);background:var(--doing-bg)} .h-eval{color:var(--todo);background:var(--todo-bg)}
+.h-upd{color:var(--mid);background:#3a2e10} .h-keep{color:var(--done);background:var(--done-bg)} .h-new{color:var(--doing);background:var(--doing-bg)} .h-eval{color:var(--todo);background:var(--todo-bg)}
 .due.ok{color:var(--done)}
 .measure{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
 .measure table{min-width:760px}
@@ -105,8 +107,8 @@ button.stat:hover{border-color:var(--accent)}
 .uni tbody tr:not(.inst){cursor:pointer}
 .uni tbody tr:not(.inst):hover td{background:var(--sunk)}
 .uni .muted{color:var(--muted);font-size:13px}
-.c-map{color:var(--todo);background:var(--todo-bg)} .c-contact{color:var(--doing);background:var(--doing-bg)} .c-meet{color:#b79bff;background:#2a2242}
-.c-talk{color:var(--mid);background:#3a2c12} .c-done{color:var(--done);background:var(--done-bg)} .c-partner{color:#4fc1ad;background:#173a33} .c-no{color:var(--block);background:var(--block-bg)}
+.c-map{color:var(--todo);background:var(--todo-bg)} .c-contact{color:var(--doing);background:var(--doing-bg)} .c-meet{color:#a9b8ff;background:#1f2a66}
+.c-talk{color:var(--mid);background:#3a2c12} .c-done{color:var(--done);background:var(--done-bg)} .c-partner{color:var(--accent);background:var(--accent-soft)} .c-no{color:var(--block);background:var(--block-bg)}
 
 /* lista */
 .project{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
@@ -148,7 +150,7 @@ td.n .z{color:var(--line)}
 .person-none td:first-child{color:var(--block);font-style:italic}
 
 /* gaveta */
-.scrim{position:fixed;inset:0;background:rgba(10,20,18,.35);z-index:20}
+.scrim{position:fixed;inset:0;background:rgba(3,7,22,.6);z-index:20}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--surface);z-index:21;box-shadow:var(--shadow);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 .dhead{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
 .dbody{padding:16px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;flex:1}
@@ -170,7 +172,7 @@ td.n .z{color:var(--line)}
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">R&amp;S Daycoval · Implantação InHire</div>
+    <div class="eyebrow">Grupo Daycoval · Recrutamento e Seleção</div>
     <h1>Repasse InHire</h1>
     <p class="sub">Projetos, entregáveis pendentes e quem assume cada frente na saída da Suellen. Clique numa tarefa para editar status, sucessor(a), prazo e notas; tudo fica salvo para quem abrir esta página.</p>
   </header>
