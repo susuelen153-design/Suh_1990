@@ -1,0 +1,409 @@
+<title>Repasse InHire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: cabeçalho com resumo → barra de filtros → visão (Lista por projeto / Quadro por status / Responsáveis) → gaveta lateral de edição */
+:root{
+  --bg:#f5f7f6; --surface:#ffffff; --sunk:#eaefed; --line:#d7dfdc; --ink:#14201d; --muted:#5b6b66;
+  --accent:#0d6b5f; --accent-soft:#d9efe9; --accent-ink:#ffffff;
+  --todo:#64748b; --doing:#1d63c9; --block:#c2410c; --done:#15803d;
+  --todo-bg:#eef1f5; --doing-bg:#e3edfb; --block-bg:#fdebe1; --done-bg:#e2f4e8;
+  --high:#b42318; --mid:#a15c07; --low:#5b6b66;
+  --shadow:0 10px 30px rgba(15,40,35,.14);
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1715; --surface:#16211e; --sunk:#1c2a26; --line:#2a3a35; --ink:#e4ece9; --muted:#93a59f;
+  --accent:#4fc1ad; --accent-soft:#173a33; --accent-ink:#06201b;
+  --todo:#9aa8bb; --doing:#7fb0ff; --block:#ff9a62; --done:#5fd08a;
+  --todo-bg:#202a33; --doing-bg:#172a45; --block-bg:#3a2216; --done-bg:#15301f;
+  --high:#ff8a7a; --mid:#f0b45a; --low:#93a59f; --shadow:0 10px 30px rgba(0,0,0,.5); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1715; --surface:#16211e; --sunk:#1c2a26; --line:#2a3a35; --ink:#e4ece9; --muted:#93a59f;
+  --accent:#4fc1ad; --accent-soft:#173a33; --accent-ink:#06201b;
+  --todo:#9aa8bb; --doing:#7fb0ff; --block:#ff9a62; --done:#5fd08a;
+  --todo-bg:#202a33; --doing-bg:#172a45; --block-bg:#3a2216; --done-bg:#15301f;
+  --high:#ff8a7a; --mid:#f0b45a; --low:#93a59f; --shadow:0 10px 30px rgba(0,0,0,.5); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);padding-inline:16px;padding-block:20px 48px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4vw,34px);letter-spacing:-.01em}
+.sub{color:var(--muted);max-width:68ch;margin:4px 0 0}
+.eyebrow{font:500 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* resumo */
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;text-align:left}
+.stat b{font:700 26px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:13px}
+.stat.warn b{color:var(--block)}
+button.stat:hover{border-color:var(--accent)}
+.projbars{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 18px}
+.pb{display:flex;flex-direction:column;gap:4px;font-size:13px;min-width:0}
+.pb .row{display:flex;justify-content:space-between;gap:8px}
+.pb .row span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pb .row span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{height:6px;border-radius:3px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+
+/* barra de ferramentas */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;border-bottom:1px solid var(--line)}
+.tabs{display:flex;background:var(--sunk);border-radius:8px;padding:3px}
+.tabs button{border:0;background:none;padding:6px 12px;border-radius:6px;color:var(--muted);font-weight:500}
+.tabs button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.toolbar select,.toolbar input[type=search]{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;min-width:0;max-width:100%}
+.toolbar input[type=search]{flex:1 1 160px}
+.spacer{flex:1}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 12px;font-weight:500}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.danger{color:var(--high);border-color:var(--high);background:transparent}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.chk{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted)}
+
+/* pills */
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-todo{color:var(--todo);background:var(--todo-bg)} .s-doing{color:var(--doing);background:var(--doing-bg)}
+.s-block{color:var(--block);background:var(--block-bg)} .s-done{color:var(--done);background:var(--done-bg)}
+.prio{font:500 12px var(--f-mono);letter-spacing:.02em}
+.prio.Alta{color:var(--high)} .prio.Média{color:var(--mid)} .prio.Baixa{color:var(--low)}
+.who{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who.none{color:var(--block);font-style:italic}
+.due{font:500 12px var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.due.late{color:var(--high)}
+
+/* lista */
+.project{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.phead{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.phead > div{min-width:0;flex:1 1 300px}
+.phead h2{font-size:19px}
+.phead p{margin:2px 0 0;color:var(--muted);font-size:13px;max-width:80ch}
+.section-label{font:500 11px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:12px 16px 6px;background:var(--sunk)}
+.scroll{overflow-x:auto}
+.trow{display:grid;grid-template-columns:28px minmax(240px,1fr) 150px 120px 64px 92px;gap:10px;align-items:center;padding:9px 16px;border-top:1px solid var(--line);min-width:720px}
+.trow:first-child{border-top:0}
+.trow.head{font:500 11px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--surface);border-top:0;padding-block:8px}
+.trow:not(.head):hover{background:var(--sunk)}
+.tt{border:0;background:none;text-align:left;padding:0;min-width:0;display:flex;flex-direction:column;gap:1px}
+.tt strong{font-weight:500}
+.tt small{color:var(--muted);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.done-row .tt strong{text-decoration:line-through;color:var(--muted)}
+.tick{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);display:grid;place-items:center;padding:0}
+.tick[aria-checked="true"]{background:var(--done);border-color:var(--done);color:var(--surface)}
+.tick svg{width:12px;height:12px}
+
+/* quadro */
+.board{display:grid;grid-template-columns:repeat(4,minmax(240px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.col{background:var(--sunk);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.col h3{font:600 14px var(--f-body);display:flex;justify-content:space-between;padding:2px 4px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:left;display:flex;flex-direction:column;gap:6px;width:100%}
+.card:hover{border-color:var(--accent)}
+.card .proj{font:500 11px var(--f-mono);color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+.card .meta{display:flex;justify-content:space-between;gap:8px;align-items:center}
+
+/* responsáveis */
+.matrix{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}
+th{font:500 11px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td.n{text-align:center;font-variant-numeric:tabular-nums}
+td.n button{border:0;background:var(--accent-soft);color:var(--ink);border-radius:6px;padding:2px 9px;font-weight:600}
+td.n .z{color:var(--line)}
+.person-none td:first-child{color:var(--block);font-style:italic}
+
+/* gaveta */
+.scrim{position:fixed;inset:0;background:rgba(10,20,18,.35);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--surface);z-index:21;box-shadow:var(--shadow);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.dhead{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+.dbody{padding:16px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;flex:1}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12px;font-weight:600;color:var(--muted)}
+.field input,.field select,.field textarea{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+.field textarea{min-height:90px;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.grid2{grid-template-columns:1fr}}
+.dfoot{display:flex;gap:8px;padding:12px 18px;border-top:1px solid var(--line);flex-wrap:wrap;align-items:center}
+.dfoot .msg{font-size:13px;color:var(--muted);flex:1 1 100%}
+.linkout{font-size:13px;color:var(--accent);word-break:break-all}
+
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:28px;text-align:center;color:var(--muted)}
+.notice{font-size:13px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:14px;z-index:30}
+@media (prefers-reduced-motion:no-preference){.drawer{animation:slide .18s ease-out}@keyframes slide{from{transform:translateX(24px);opacity:.6}}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">R&amp;S Daycoval · Implantação InHire</div>
+    <h1>Repasse InHire</h1>
+    <p class="sub">Projetos, entregáveis pendentes e quem assume cada frente na saída da Suellen. Clique numa tarefa para editar status, sucessor(a), prazo e notas; tudo fica salvo para quem abrir esta página.</p>
+  </header>
+
+  <section class="summary" id="summary" aria-label="Resumo"></section>
+  <section class="projbars" id="projbars" aria-label="Progresso por projeto"></section>
+
+  <div class="toolbar" role="toolbar" aria-label="Filtros e visões">
+    <div class="tabs" role="group" aria-label="Visão">
+      <button id="tab-list" data-view="list" aria-pressed="true">Lista</button>
+      <button id="tab-board" data-view="board" aria-pressed="false">Quadro</button>
+      <button id="tab-people" data-view="people" aria-pressed="false">Responsáveis</button>
+    </div>
+    <select id="f-project" aria-label="Filtrar por projeto"></select>
+    <select id="f-person" aria-label="Filtrar por sucessor(a)"></select>
+    <select id="f-status" aria-label="Filtrar por status"></select>
+    <input id="f-q" type="search" placeholder="Buscar tarefa, nota ou entregável" aria-label="Buscar">
+    <label class="chk"><input id="f-open" type="checkbox"> Só pendentes</label>
+    <span class="spacer"></span>
+    <button class="btn" id="btn-proj">+ Projeto</button>
+    <button class="btn primary" id="btn-task">+ Tarefa</button>
+    <button class="btn" id="btn-csv" hidden>Exportar CSV (Asana)</button>
+  </div>
+
+  <p class="notice" id="notice">Carregando o quadro…</p>
+  <main id="view"></main>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-modal="true" role="dialog" aria-labelledby="d-title"></aside>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const STATUSES=[["A fazer","s-todo"],["Em andamento","s-doing"],["Bloqueado","s-block"],["Concluído","s-done"]];
+const PRIOS=["Alta","Média","Baixa"];
+const SC=Object.fromEntries(STATUSES);
+const NONE="__none__";
+const state={projects:[],tasks:[],view:"list",fp:"",fperson:"",fs:"",q:"",open:false,canWrite:true,db:null};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+const fmtDate=d=>d?d.split("-").reverse().join("/"):"";
+const pname=id=>(state.projects.find(p=>p.id===id)||{}).name||"Sem projeto";
+
+try{const v=localStorage.getItem("repasse-view");if(v)state.view=v}catch(e){}
+
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,2200)}
+
+function filtered(){
+  const q=state.q.trim().toLowerCase();
+  return state.tasks.filter(t=>{
+    if(state.fp&&t.project!==state.fp)return false;
+    if(state.fperson===NONE&&t.successor)return false;
+    if(state.fperson&&state.fperson!==NONE&&t.successor!==state.fperson)return false;
+    if(state.fs&&t.status!==state.fs)return false;
+    if(state.open&&t.status==="Concluído")return false;
+    if(q&&!(t.title+" "+t.notes+" "+t.deliverable+" "+t.section).toLowerCase().includes(q))return false;
+    return true;
+  });
+}
+const sortT=(a,b)=>(a.order||0)-(b.order||0)||a.id.localeCompare(b.id);
+const people=()=>[...new Set(state.tasks.map(t=>t.successor).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+
+function renderSummary(){
+  const T=state.tasks, open=T.filter(t=>t.status!=="Concluído");
+  const late=open.filter(t=>t.due&&t.due<today()).length;
+  const s=[
+    ["Pendentes",open.length,"",()=>{state.open=true;state.fs="";state.fperson=""}],
+    ["Sem sucessor(a)",open.filter(t=>!t.successor).length,"warn",()=>{state.fperson=NONE;state.open=true}],
+    ["Bloqueadas",T.filter(t=>t.status==="Bloqueado").length,"warn",()=>{state.fs="Bloqueado";state.open=false}],
+    ["Atrasadas",late,"warn",()=>{state.open=true}],
+    ["Concluídas",T.filter(t=>t.status==="Concluído").length+" / "+T.length,"",()=>{state.fs="Concluído";state.open=false}],
+  ];
+  $("#summary").innerHTML=s.map((x,i)=>`<button class="stat ${x[2]&&+x[1]>0?x[2]:""}" data-i="${i}"><b>${x[1]}</b><span>${x[0]}</span></button>`).join("");
+  $("#summary").querySelectorAll("button").forEach(b=>b.onclick=()=>{s[b.dataset.i][3]();syncFilters();render()});
+  $("#projbars").innerHTML=[...state.projects].sort((a,b)=>a.order-b.order).map(p=>{
+    const pt=T.filter(t=>t.project===p.id),d=pt.filter(t=>t.status==="Concluído").length,pc=pt.length?Math.round(d/pt.length*100):0;
+    return `<div class="pb"><div class="row"><span>${esc(p.name)}</span><span>${d}/${pt.length}</span></div><div class="bar"><i style="width:${pc}%"></i></div></div>`}).join("");
+}
+
+function syncFilters(){
+  const ps=[...state.projects].sort((a,b)=>a.order-b.order);
+  $("#f-project").innerHTML=`<option value="">Todos os projetos</option>`+ps.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("");
+  $("#f-person").innerHTML=`<option value="">Todos os sucessores</option><option value="${NONE}">Sem sucessor(a)</option>`+people().map(p=>`<option>${esc(p)}</option>`).join("");
+  $("#f-status").innerHTML=`<option value="">Todos os status</option>`+STATUSES.map(s=>`<option>${s[0]}</option>`).join("");
+  $("#f-project").value=state.fp;$("#f-person").value=state.fperson;$("#f-status").value=state.fs;$("#f-q").value=state.q;$("#f-open").checked=state.open;
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.view===state.view));
+}
+
+const tickSvg='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 6.5l2.2 2.2L9.5 3.8"/></svg>';
+function whoHTML(t){return t.successor?`<span class="who" title="Atual: ${esc(t.owner)}">${esc(t.successor)}</span>`:`<span class="who none">Definir sucessor(a)</span>`}
+function dueHTML(t){return t.due?`<span class="due ${t.due<today()&&t.status!=="Concluído"?"late":""}">${fmtDate(t.due)}</span>`:`<span class="due">—</span>`}
+
+function renderList(list){
+  const ps=[...state.projects].sort((a,b)=>a.order-b.order).filter(p=>!state.fp||p.id===state.fp);
+  const out=ps.map(p=>{
+    const pt=list.filter(t=>t.project===p.id).sort(sortT);
+    if(!pt.length&&(state.q||state.fperson||state.fs||state.open))return "";
+    const secs=[...new Set(pt.map(t=>t.section||"Geral"))];
+    const rows=secs.map(s=>`<div class="section-label">${esc(s)}</div>`+pt.filter(t=>(t.section||"Geral")===s).map(t=>`
+      <div class="trow ${t.status==="Concluído"?"done-row":""}">
+        <button class="tick" role="checkbox" aria-checked="${t.status==="Concluído"}" aria-label="Concluir" data-tick="${esc(t.id)}" ${state.canWrite?"":"disabled"}>${t.status==="Concluído"?tickSvg:""}</button>
+        <button class="tt" data-open="${esc(t.id)}"><strong>${esc(t.title)}</strong><small>${esc(t.deliverable||t.notes)}</small></button>
+        ${whoHTML(t)}
+        <span><span class="pill ${SC[t.status]||"s-todo"}">${esc(t.status)}</span></span>
+        <span class="prio ${esc(t.priority)}">${esc(t.priority)}</span>
+        ${dueHTML(t)}
+      </div>`).join("")).join("");
+    return `<section class="project">
+      <div class="phead"><div><h2>${esc(p.name)}</h2><p>${esc(p.desc)}</p></div>
+      <div style="display:flex;gap:6px"><button class="btn" data-addin="${esc(p.id)}" ${state.canWrite?"":"disabled"}>+ Tarefa</button><button class="btn" data-editp="${esc(p.id)}" ${state.canWrite?"":"disabled"}>Editar</button></div></div>
+      <div class="scroll"><div class="trow head"><span></span><span>Tarefa · entregável</span><span>Sucessor(a)</span><span>Status</span><span>Prior.</span><span>Prazo</span></div>
+      ${rows||`<div class="trow"><span></span><span class="notice">Nenhuma tarefa ainda.</span></div>`}</div></section>`;
+  }).join("");
+  return out||`<div class="empty">Nenhuma tarefa com esses filtros.</div>`;
+}
+
+function renderBoard(list){
+  return `<div class="board">${STATUSES.map(([s,c])=>{
+    const ts=list.filter(t=>t.status===s).sort((a,b)=>PRIOS.indexOf(a.priority)-PRIOS.indexOf(b.priority)||sortT(a,b));
+    return `<div class="col"><h3><span class="pill ${c}">${s}</span><span class="notice">${ts.length}</span></h3>
+      ${ts.map(t=>`<button class="card" data-open="${esc(t.id)}"><span class="proj">${esc(pname(t.project))}</span><span>${esc(t.title)}</span>
+      <span class="meta">${whoHTML(t)}<span class="prio ${esc(t.priority)}">${esc(t.priority)}</span></span></button>`).join("")||`<span class="notice" style="padding:4px">Vazio</span>`}</div>`}).join("")}</div>`;
+}
+
+function renderPeople(list){
+  const ps=[...state.projects].sort((a,b)=>a.order-b.order);
+  const open=list.filter(t=>t.status!=="Concluído");
+  const names=[...people(),NONE];
+  const rows=names.map(n=>{
+    const mine=open.filter(t=>n===NONE?!t.successor:t.successor===n);
+    if(!mine.length&&n!==NONE)return "";
+    return `<tr class="${n===NONE?"person-none":""}"><td>${n===NONE?"Sem sucessor(a)":esc(n)}</td>${ps.map(p=>{const k=mine.filter(t=>t.project===p.id).length;
+      return `<td class="n">${k?`<button data-pf="${esc(p.id)}" data-pp="${esc(n)}">${k}</button>`:`<span class="z">·</span>`}</td>`}).join("")}<td class="n"><b>${mine.length}</b></td></tr>`}).join("");
+  return `<div class="matrix"><table><thead><tr><th>Sucessor(a)</th>${ps.map(p=>`<th>${esc(p.name)}</th>`).join("")}<th>Total</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <p class="notice">Tarefas pendentes por pessoa e projeto. Clique num número para ver a lista filtrada.</p>`;
+}
+
+function render(){
+  renderSummary();
+  const list=filtered();
+  const v=$("#view");
+  if(!state.tasks.length&&!state.projects.length){v.innerHTML=`<div class="empty">O quadro está vazio. Use “+ Projeto” para criar o primeiro projeto e depois “+ Tarefa”.</div>`;return}
+  v.innerHTML=state.view==="board"?renderBoard(list):state.view==="people"?renderPeople(list):renderList(list);
+}
+
+/* gaveta */
+function openDrawer(html){$("#drawer").innerHTML=html;$("#drawer").hidden=false;$("#scrim").hidden=false;const f=$("#drawer").querySelector("input,select,textarea");f&&f.focus()}
+function closeDrawer(){$("#drawer").hidden=true;$("#scrim").hidden=true}
+$("#scrim").onclick=closeDrawer;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#drawer").hidden)closeDrawer()});
+
+function taskForm(t,isNew){
+  const ro=state.canWrite?"":"disabled";
+  const projOpts=[...state.projects].sort((a,b)=>a.order-b.order).map(p=>`<option value="${esc(p.id)}" ${p.id===t.project?"selected":""}>${esc(p.name)}</option>`).join("");
+  const secs=[...new Set(state.tasks.filter(x=>x.project===t.project).map(x=>x.section).filter(Boolean))];
+  openDrawer(`<div class="dhead"><h2 id="d-title" style="font-size:18px">${isNew?"Nova tarefa":"Tarefa"}</h2><button class="btn" id="d-close">Fechar</button></div>
+  <form class="dbody" id="tform">
+    <div class="field"><label for="t-title">Tarefa</label><input id="t-title" required value="${esc(t.title)}" ${ro}></div>
+    <div class="grid2">
+      <div class="field"><label for="t-project">Projeto</label><select id="t-project" ${ro}>${projOpts}</select></div>
+      <div class="field"><label for="t-section">Seção</label><input id="t-section" list="t-seclist" value="${esc(t.section)}" ${ro}><datalist id="t-seclist">${secs.map(s=>`<option value="${esc(s)}">`).join("")}</datalist></div>
+      <div class="field"><label for="t-status">Status</label><select id="t-status" ${ro}>${STATUSES.map(s=>`<option ${s[0]===t.status?"selected":""}>${s[0]}</option>`).join("")}</select></div>
+      <div class="field"><label for="t-prio">Prioridade</label><select id="t-prio" ${ro}>${PRIOS.map(s=>`<option ${s===t.priority?"selected":""}>${s}</option>`).join("")}</select></div>
+      <div class="field"><label for="t-owner">Responsável atual</label><input id="t-owner" value="${esc(t.owner)}" ${ro}></div>
+      <div class="field"><label for="t-succ">Sucessor(a)</label><input id="t-succ" list="t-plist" placeholder="Quem assume" value="${esc(t.successor)}" ${ro}><datalist id="t-plist">${people().map(p=>`<option value="${esc(p)}">`).join("")}</datalist></div>
+      <div class="field"><label for="t-due">Prazo</label><input id="t-due" type="date" value="${esc(t.due)}" ${ro}></div>
+      <div class="field"><label for="t-link">Link do material</label><input id="t-link" type="url" value="${esc(t.link)}" ${ro}></div>
+    </div>
+    ${t.link?`<a class="linkout" href="${esc(t.link)}" target="_blank" rel="noopener">Abrir material ↗</a>`:""}
+    <div class="field"><label for="t-deliv">Entregável esperado</label><input id="t-deliv" value="${esc(t.deliverable)}" ${ro}></div>
+    <div class="field"><label for="t-notes">Contexto e notas para quem assume</label><textarea id="t-notes" ${ro}>${esc(t.notes)}</textarea></div>
+  </form>
+  <div class="dfoot"><span class="msg" id="d-msg">${state.canWrite?"":"Você pode ver, mas não editar este quadro."}</span>
+    <button class="btn primary" id="d-save" ${ro}>Salvar</button>
+    ${isNew?"":`<button class="btn danger" id="d-del" ${ro}>Excluir</button>`}</div>`);
+  $("#d-close").onclick=closeDrawer;
+  $("#tform").onsubmit=e=>{e.preventDefault();$("#d-save").click()};
+  $("#d-save").onclick=async()=>{
+    const title=$("#t-title").value.trim(); if(!title){$("#d-msg").textContent="Dê um nome à tarefa.";return}
+    const body={...t,title,project:$("#t-project").value,section:$("#t-section").value.trim(),status:$("#t-status").value,priority:$("#t-prio").value,
+      owner:$("#t-owner").value.trim(),successor:$("#t-succ").value.trim(),due:$("#t-due").value,link:$("#t-link").value.trim(),
+      deliverable:$("#t-deliv").value.trim(),notes:$("#t-notes").value,updatedAt:new Date().toISOString()};
+    delete body.id;
+    if(isNew)body.order=Math.max(0,...state.tasks.filter(x=>x.project===body.project).map(x=>x.order||0))+1;
+    $("#d-save").disabled=true;
+    try{await state.db.collection("tasks").doc(t.id).set(body);closeDrawer();toast(isNew?"Tarefa criada":"Tarefa salva")}
+    catch(err){$("#d-save").disabled=false;$("#d-msg").textContent=writeErr(err)}
+  };
+  const del=$("#d-del");
+  if(del)del.onclick=async()=>{
+    if(del.dataset.armed!=="1"){del.dataset.armed="1";del.textContent="Confirmar exclusão";return}
+    try{await state.db.collection("tasks").doc(t.id).delete();closeDrawer();toast("Tarefa excluída")}catch(err){$("#d-msg").textContent=writeErr(err)}
+  };
+}
+
+function projectForm(p,isNew){
+  const ro=state.canWrite?"":"disabled";
+  openDrawer(`<div class="dhead"><h2 id="d-title" style="font-size:18px">${isNew?"Novo projeto":"Projeto"}</h2><button class="btn" id="d-close">Fechar</button></div>
+  <form class="dbody" id="pform">
+    <div class="field"><label for="p-name">Nome do projeto</label><input id="p-name" required value="${esc(p.name)}" ${ro}></div>
+    <div class="field"><label for="p-desc">Descrição e escopo</label><textarea id="p-desc" ${ro}>${esc(p.desc)}</textarea></div>
+  </form>
+  <div class="dfoot"><span class="msg" id="d-msg"></span><button class="btn primary" id="d-save" ${ro}>Salvar</button></div>`);
+  $("#d-close").onclick=closeDrawer;
+  $("#pform").onsubmit=e=>{e.preventDefault();$("#d-save").click()};
+  $("#d-save").onclick=async()=>{
+    const name=$("#p-name").value.trim(); if(!name){$("#d-msg").textContent="Dê um nome ao projeto.";return}
+    const body={name,desc:$("#p-desc").value.trim(),order:isNew?Math.max(-1,...state.projects.map(x=>x.order))+1:p.order};
+    try{await state.db.collection("projects").doc(p.id).set(body);closeDrawer();toast("Projeto salvo")}catch(err){$("#d-msg").textContent=writeErr(err)}
+  };
+}
+
+function writeErr(err){
+  if(err&&err.code==="invalid_argument"){state.canWrite=false;render();return "Sem permissão para editar. Peça acesso de Colaborador à dona do quadro."}
+  if(err&&err.code==="quota_exceeded")return "O quadro atingiu o limite de itens. Exclua tarefas antigas e tente de novo.";
+  return "Não foi possível salvar agora. Tente de novo em instantes.";
+}
+const newId=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+/* eventos */
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{state.view=b.dataset.view;try{localStorage.setItem("repasse-view",state.view)}catch(e){}syncFilters();render()});
+$("#f-project").onchange=e=>{state.fp=e.target.value;render()};
+$("#f-person").onchange=e=>{state.fperson=e.target.value;render()};
+$("#f-status").onchange=e=>{state.fs=e.target.value;render()};
+$("#f-q").oninput=e=>{state.q=e.target.value;render()};
+$("#f-open").onchange=e=>{state.open=e.target.checked;render()};
+$("#btn-task").onclick=()=>{if(!state.projects.length){projectForm({id:newId("p"),name:"",desc:""},true);return}
+  taskForm({id:newId("t"),project:state.fp||[...state.projects].sort((a,b)=>a.order-b.order)[0].id,section:"",title:"",status:"A fazer",priority:"Média",owner:"Suellen Pereira da Silva",successor:"",due:"",link:"",deliverable:"",notes:""},true)};
+$("#btn-proj").onclick=()=>projectForm({id:newId("p"),name:"",desc:""},true);
+$("#view").addEventListener("click",async e=>{
+  const o=e.target.closest("[data-open]"); if(o){const t=state.tasks.find(x=>x.id===o.dataset.open);t&&taskForm(t,false);return}
+  const a=e.target.closest("[data-addin]"); if(a){taskForm({id:newId("t"),project:a.dataset.addin,section:"",title:"",status:"A fazer",priority:"Média",owner:"Suellen Pereira da Silva",successor:"",due:"",link:"",deliverable:"",notes:""},true);return}
+  const ep=e.target.closest("[data-editp]"); if(ep){const p=state.projects.find(x=>x.id===ep.dataset.editp);p&&projectForm(p,false);return}
+  const pf=e.target.closest("[data-pf]"); if(pf){state.fp=pf.dataset.pf;state.fperson=pf.dataset.pp;state.open=true;state.view="list";syncFilters();render();return}
+  const tk=e.target.closest("[data-tick]"); if(tk&&state.canWrite){
+    const t=state.tasks.find(x=>x.id===tk.dataset.tick); if(!t)return;
+    const status=t.status==="Concluído"?"A fazer":"Concluído"; tk.disabled=true;
+    try{await state.db.collection("tasks").doc(t.id).update({status,updatedAt:new Date().toISOString()});toast(status==="Concluído"?"Concluída":"Reaberta")}
+    catch(err){toast(writeErr(err))} finally{tk.disabled=false}
+  }
+});
+
+/* exportação CSV para importar no Asana */
+function csv(){
+  const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+  const head=["Name","Section/Column","Assignee","Due Date","Description","Status","Prioridade","Responsável atual","Sucessor(a)","Entregável","Link"];
+  const rows=[...state.tasks].sort((a,b)=>{const pa=state.projects.find(p=>p.id===a.project),pb=state.projects.find(p=>p.id===b.project);return((pa?.order??99)-(pb?.order??99))||sortT(a,b)})
+    .map(t=>[t.title,pname(t.project)+" · "+(t.section||"Geral"),"",t.due,`Entregável: ${t.deliverable}\n${t.notes}${t.link?"\nLink: "+t.link:""}`,t.status,t.priority,t.owner,t.successor,t.deliverable,t.link].map(q).join(","));
+  return "﻿"+[head.map(q).join(","),...rows].join("\r\n");
+}
+
+/* boot */
+syncFilters();render();
+(async()=>{
+  const c=window.claude;
+  const [db,user,dl]=await Promise.all([c?.use?.("db"),c?.use?.("user"),c?.use?.("downloads")].map(p=>Promise.resolve(p).catch(()=>null)));
+  if(dl){const b=$("#btn-csv");b.hidden=false;b.onclick=async()=>{try{await dl.save({filename:"repasse-inhire-asana.csv",data:csv()});toast("CSV pronto")}catch(e){toast("Download cancelado")}}}
+  if(!db){$("#notice").textContent="Entre na sua conta Claude para ver e editar o quadro.";state.canWrite=false;["#btn-task","#btn-proj"].forEach(s=>$(s).disabled=true);render();return}
+  state.db=db;
+  if(user){try{const w=await user.can("data.write");if(w===false){state.canWrite=false;["#btn-task","#btn-proj"].forEach(s=>$(s).disabled=true)}}catch(e){}}
+  $("#notice").textContent=state.canWrite?"Alterações ficam salvas e aparecem para todo mundo que abrir esta página.":"Você está no modo leitura.";
+  db.collection("projects").onSnapshot(s=>{state.projects=s.docs.map(d=>({id:d.id,...d.data()}));syncFilters();render()},()=>{$("#notice").textContent="Não foi possível carregar os projetos. Recarregue a página."});
+  db.collection("tasks").onSnapshot(s=>{state.tasks=s.docs.map(d=>({id:d.id,...d.data()}));syncFilters();render()},()=>{$("#notice").textContent="Não foi possível carregar as tarefas. Recarregue a página."});
+})();
+</script>
