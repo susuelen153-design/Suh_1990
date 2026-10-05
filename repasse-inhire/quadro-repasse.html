@@ -92,6 +92,22 @@ button.stat:hover{border-color:var(--accent)}
 .pcard .nums b.w{color:var(--block)}
 .stack{display:flex;flex-direction:column;gap:22px}
 
+/* universidades */
+.funnel{display:flex;flex-wrap:wrap;gap:8px}
+.funnel button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px;display:flex;gap:8px;align-items:center}
+.funnel button b{font-variant-numeric:tabular-nums}
+.funnel button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.uni{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+.uni table{min-width:900px}
+.uni tr.inst td{background:var(--sunk);font:600 15px var(--f-display);color:var(--ink)}
+.uni tr.inst td small{font:400 12.5px var(--f-body);color:var(--muted);margin-left:8px}
+.uni td{vertical-align:top}
+.uni tbody tr:not(.inst){cursor:pointer}
+.uni tbody tr:not(.inst):hover td{background:var(--sunk)}
+.uni .muted{color:var(--muted);font-size:13px}
+.c-map{color:var(--todo);background:var(--todo-bg)} .c-contact{color:var(--doing);background:var(--doing-bg)} .c-meet{color:#b79bff;background:#2a2242}
+.c-talk{color:var(--mid);background:#3a2c12} .c-done{color:var(--done);background:var(--done-bg)} .c-partner{color:#4fc1ad;background:#173a33} .c-no{color:var(--block);background:var(--block-bg)}
+
 /* lista */
 .project{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .phead{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
@@ -166,6 +182,7 @@ td.n .z{color:var(--line)}
     <div class="tabs" role="group" aria-label="Visão">
       <button id="tab-projects" data-view="projects" aria-pressed="true">Projetos</button>
       <button id="tab-list" data-view="list" aria-pressed="false">Lista</button>
+      <button id="tab-unis" data-view="unis" aria-pressed="false">Universidades</button>
       <button id="tab-board" data-view="board" aria-pressed="false">Quadro</button>
       <button id="tab-people" data-view="people" aria-pressed="false">Responsáveis</button>
     </div>
@@ -179,7 +196,9 @@ td.n .z{color:var(--line)}
     <span class="spacer"></span>
     <button class="btn" id="btn-proj">+ Projeto</button>
     <button class="btn primary" id="btn-task">+ Tarefa</button>
+    <button class="btn" id="btn-contact" hidden>+ Contato</button>
     <button class="btn" id="btn-csv" hidden>Exportar CSV (Asana)</button>
+    <button class="btn" id="btn-ccsv" hidden>Exportar contatos (CSV)</button>
   </div>
 
   <p class="notice" id="notice">Carregando o quadro…</p>
@@ -195,14 +214,17 @@ const STATUSES=[["A fazer","s-todo"],["Em andamento","s-doing"],["Bloqueado","s-
 const PRIOS=["Alta","Média","Baixa"];
 const HAND=[["Atualizar","h-upd","Existe, mas precisa de atualização antes do repasse"],["Manter","h-keep","Está pronto: repassar como está"],["Criar","h-new","Ainda não existe: precisa ser feito"],["A avaliar","h-eval","Falta decidir"]];
 const HC=Object.fromEntries(HAND.map(h=>[h[0],h[1]]));
+const CSTAT=[["Mapear contato","c-map"],["Contato feito","c-contact"],["Reunião agendada","c-meet"],["Palestra agendada","c-talk"],["Palestra realizada","c-done"],["Parceria ativa","c-partner"],["Sem retorno","c-no"]];
+const CC=Object.fromEntries(CSTAT);
+const CHANNELS=["Centro de carreiras","Empresa júnior","Liga / entidade estudantil","Professor / coordenação","Cia de Estágios","Outro"];
 const SC=Object.fromEntries(STATUSES);
 const NONE="__none__";
-const state={projects:[],tasks:[],view:"projects",ft:"",fp:"",fperson:"",fs:"",fh:"",q:"",open:false,canWrite:true,db:null};
+const state={projects:[],tasks:[],contacts:[],cs:"",view:"projects",ft:"",fp:"",fperson:"",fs:"",fh:"",q:"",open:false,canWrite:true,db:null};
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const today=()=>new Date().toISOString().slice(0,10);
 const fmtDate=d=>d?d.split("-").reverse().join("/"):"";
-const TYPE_ORDER=["Gestão do repasse","Implantação do sistema","Programas de atração","Comunicação e marca","Capacitação e documentação"];
+const TYPE_ORDER=["Gestão do repasse","Manutenção","InHire · Nova ATS","Programa Delta"];
 const ptype=p=>(p&&p.type)||"Outros";
 const types=()=>{const ts=[...new Set(state.projects.map(ptype))];return ts.sort((a,b)=>((TYPE_ORDER.indexOf(a)+1)||99)-((TYPE_ORDER.indexOf(b)+1)||99)||a.localeCompare(b))};
 const tcolor=t=>{const i=types().indexOf(t);return `var(--t${(i%6)+1})`};
@@ -294,6 +316,64 @@ function renderProjects(){
       <span class="nums">${k.who.length?"Sucessor(es): "+esc(k.who.join(", ")):"Sucessor(a) ainda não definido(a)"}</span></button>`}).join("")}</div>`)}</div>`;
 }
 
+function renderUnis(){
+  const q=state.q.trim().toLowerCase();
+  const all=state.contacts, C=all.filter(c=>(!state.cs||c.status===state.cs)&&(!q||Object.values(c).join(" ").toLowerCase().includes(q)));
+  const funnel=`<div class="funnel">${[["",`Todos`]].concat(CSTAT.map(x=>[x[0],x[0]])).map(([v,l])=>`<button data-cs="${esc(v)}" aria-pressed="${state.cs===v}"><span>${esc(l)}</span><b>${v?all.filter(c=>c.status===v).length:all.length}</b></button>`).join("")}</div>`;
+  const insts=[...new Set(C.map(c=>c.inst))].sort((a,b)=>{const oa=Math.min(...C.filter(c=>c.inst===a).map(c=>c.order||0)),ob=Math.min(...C.filter(c=>c.inst===b).map(c=>c.order||0));return oa-ob||a.localeCompare(b)});
+  const rows=insts.map(i=>{const g=C.filter(c=>c.inst===i).sort((a,b)=>(a.order||0)-(b.order||0));const info=g.find(c=>c.reach)?.reach||"";
+    return `<tr class="inst"><td colspan="6">${esc(i)}${info?`<small>${esc(info)}</small>`:""}</td></tr>`+g.map(c=>`<tr data-contact="${esc(c.id)}">
+      <td>${esc(c.channel)}<div class="muted">${esc(c.courses||"")}</div></td>
+      <td>${c.name?esc(c.name):`<span class="who none">Mapear</span>`}<div class="muted">${esc([c.role,c.email,c.phone].filter(Boolean).join(" · "))}</div></td>
+      <td><span class="pill ${CC[c.status]||"c-map"}">${esc(c.status||"Mapear contato")}</span></td>
+      <td>${esc(c.next||"")}${c.date?`<div class="muted">${fmtDate(c.date)}</div>`:""}</td>
+      <td>${c.owner?esc(c.owner):`<span class="who none">Definir</span>`}</td>
+      <td class="muted">${esc(c.notes||"")}</td></tr>`).join("")}).join("");
+  return `<div class="stack">${funnel}<div class="uni"><table><thead><tr><th>Canal · cursos</th><th>Contato</th><th>Status</th><th>Próxima ação</th><th>Responsável</th><th>Notas</th></tr></thead>
+    <tbody>${rows||`<tr><td colspan="6" class="muted">Nenhum contato com esses filtros. Use “+ Contato” para cadastrar.</td></tr>`}</tbody></table></div>
+    <p class="notice" style="margin-top:-12px">Relacionamento com as universidades target do Programa Delta. Clique numa linha para editar contato, status e próxima ação.</p></div>`;
+}
+function contactForm(c,isNew){
+  const ro=state.canWrite?"":"disabled";
+  const insts=[...new Set(state.contacts.map(x=>x.inst))];
+  openDrawer(`<div class="dhead"><h2 id="d-title" style="font-size:18px">${isNew?"Novo contato":"Contato"}</h2><button class="btn" id="d-close">Fechar</button></div>
+  <form class="dbody" id="cform">
+    <div class="grid2">
+      <div class="field"><label for="c-inst">Instituição</label><input id="c-inst" list="c-ilist" required value="${esc(c.inst)}" ${ro}><datalist id="c-ilist">${insts.map(i=>`<option value="${esc(i)}">`).join("")}</datalist></div>
+      <div class="field"><label for="c-channel">Canal</label><select id="c-channel" ${ro}>${CHANNELS.map(x=>`<option ${x===c.channel?"selected":""}>${x}</option>`).join("")}</select></div>
+      <div class="field"><label for="c-name">Nome do contato</label><input id="c-name" value="${esc(c.name)}" ${ro}></div>
+      <div class="field"><label for="c-role">Cargo / entidade</label><input id="c-role" value="${esc(c.role)}" ${ro}></div>
+      <div class="field"><label for="c-email">E-mail</label><input id="c-email" type="email" value="${esc(c.email)}" ${ro}></div>
+      <div class="field"><label for="c-phone">Telefone / WhatsApp</label><input id="c-phone" value="${esc(c.phone)}" ${ro}></div>
+      <div class="field"><label for="c-status">Status</label><select id="c-status" ${ro}>${CSTAT.map(x=>`<option ${x[0]===c.status?"selected":""}>${x[0]}</option>`).join("")}</select></div>
+      <div class="field"><label for="c-owner">Responsável Daycoval</label><input id="c-owner" list="t-plist2" value="${esc(c.owner)}" ${ro}><datalist id="t-plist2">${people().map(p=>`<option value="${esc(p)}">`).join("")}</datalist></div>
+      <div class="field"><label for="c-next">Próxima ação</label><input id="c-next" value="${esc(c.next)}" placeholder="Ex.: agendar palestra" ${ro}></div>
+      <div class="field"><label for="c-date">Data</label><input id="c-date" type="date" value="${esc(c.date)}" ${ro}></div>
+    </div>
+    <div class="field"><label for="c-courses">Cursos-alvo</label><input id="c-courses" value="${esc(c.courses)}" ${ro}></div>
+    <div class="field"><label for="c-notes">Notas (histórico, combinados, resultado de palestras)</label><textarea id="c-notes" ${ro}>${esc(c.notes)}</textarea></div>
+  </form>
+  <div class="dfoot"><span class="msg" id="d-msg"></span><button class="btn primary" id="d-save" ${ro}>Salvar</button>${isNew?"":`<button class="btn danger" id="d-del" ${ro}>Excluir</button>`}</div>`);
+  $("#d-close").onclick=closeDrawer;
+  $("#cform").onsubmit=e=>{e.preventDefault();$("#d-save").click()};
+  $("#d-save").onclick=async()=>{
+    const inst=$("#c-inst").value.trim(); if(!inst){$("#d-msg").textContent="Informe a instituição.";return}
+    const body={...c,inst,channel:$("#c-channel").value,name:$("#c-name").value.trim(),role:$("#c-role").value.trim(),email:$("#c-email").value.trim(),phone:$("#c-phone").value.trim(),
+      status:$("#c-status").value,owner:$("#c-owner").value.trim(),next:$("#c-next").value.trim(),date:$("#c-date").value,courses:$("#c-courses").value.trim(),notes:$("#c-notes").value,updatedAt:new Date().toISOString()};
+    delete body.id;
+    if(isNew){const same=state.contacts.filter(x=>x.inst===inst);body.order=same.length?Math.max(...same.map(x=>x.order||0))+1:Math.max(0,...state.contacts.map(x=>x.order||0))+10}
+    try{await state.db.collection("contacts").doc(c.id).set(body);closeDrawer();toast("Contato salvo")}catch(err){$("#d-msg").textContent=writeErr(err)}
+  };
+  const del=$("#d-del");
+  if(del)del.onclick=async()=>{if(del.dataset.armed!=="1"){del.dataset.armed="1";del.textContent="Confirmar exclusão";return}
+    try{await state.db.collection("contacts").doc(c.id).delete();closeDrawer();toast("Contato excluído")}catch(err){$("#d-msg").textContent=writeErr(err)}};
+}
+function contactsCsv(){
+  const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+  const head=["Instituição","Canal","Contato","Cargo/entidade","E-mail","Telefone","Status","Próxima ação","Data","Responsável","Cursos","Notas"];
+  return "\ufeff"+[head.map(q).join(","),...[...state.contacts].sort((a,b)=>(a.order||0)-(b.order||0)).map(c=>[c.inst,c.channel,c.name,c.role,c.email,c.phone,c.status,c.next,c.date,c.owner,c.courses,c.notes].map(q).join(","))].join("\r\n");
+}
+
 function renderList(list){
   const ps=visProjects();
   const one=p=>{
@@ -347,7 +427,8 @@ function render(){
   const list=filtered();
   const v=$("#view");
   if(!state.tasks.length&&!state.projects.length){v.innerHTML=`<div class="empty">O quadro está vazio. Use “+ Projeto” para criar o primeiro projeto e depois “+ Tarefa”.</div>`;return}
-  v.innerHTML=state.view==="projects"?renderProjects():state.view==="board"?renderBoard(list):state.view==="people"?renderPeople(list):renderList(list);
+  const unis=state.view==="unis";["#f-type","#f-project","#f-person","#f-status","#f-hand"].forEach(x=>$(x).hidden=unis);$("#f-open").parentElement.hidden=unis;$("#btn-task").hidden=unis;$("#btn-contact").hidden=!unis||!state.db;$("#btn-ccsv").hidden=!unis||!state.dl;$("#btn-csv").hidden=unis||!state.dl;
+  v.innerHTML=unis?renderUnis():state.view==="projects"?renderProjects():state.view==="board"?renderBoard(list):state.view==="people"?renderPeople(list):renderList(list);
 }
 
 /* gaveta */
@@ -439,8 +520,11 @@ $("#f-q").oninput=e=>{state.q=e.target.value;render()};
 $("#f-open").onchange=e=>{state.open=e.target.checked;render()};
 $("#btn-task").onclick=()=>{if(!state.projects.length){projectForm({id:newId("p"),name:"",type:state.ft,desc:""},true);return}
   taskForm({id:newId("t"),project:state.fp||visProjects().concat([...state.projects].sort(sortP))[0].id,section:"",title:"",status:"A fazer",handover:"A avaliar",priority:"Média",owner:"Suellen Pereira da Silva",successor:"",due:"",link:"",deliverable:"",notes:""},true)};
+$("#btn-contact").onclick=()=>contactForm({id:newId("c"),inst:"",channel:CHANNELS[0],name:"",role:"",email:"",phone:"",status:"Mapear contato",owner:"",next:"",date:"",courses:"",notes:""},true);
 $("#btn-proj").onclick=()=>projectForm({id:newId("p"),name:"",type:state.ft,desc:""},true);
 $("#view").addEventListener("click",async e=>{
+  const cs=e.target.closest("[data-cs]"); if(cs){state.cs=cs.dataset.cs;render();return}
+  const ct=e.target.closest("[data-contact]"); if(ct){const c=state.contacts.find(x=>x.id===ct.dataset.contact);c&&contactForm(c,false);return}
   const g=e.target.closest("[data-goto]"); if(g){state.fp=g.dataset.goto;state.view="list";try{localStorage.setItem("repasse-view","list")}catch(x){}syncFilters();render();window.scrollTo({top:0});return}
   const o=e.target.closest("[data-open]"); if(o){const t=state.tasks.find(x=>x.id===o.dataset.open);t&&taskForm(t,false);return}
   const a=e.target.closest("[data-addin]"); if(a){taskForm({id:newId("t"),project:a.dataset.addin,section:"",title:"",status:"A fazer",handover:"A avaliar",priority:"Média",owner:"Suellen Pereira da Silva",successor:"",due:"",link:"",deliverable:"",notes:""},true);return}
@@ -468,12 +552,13 @@ syncFilters();render();
 (async()=>{
   const c=window.claude;
   const [db,user,dl]=await Promise.all([c?.use?.("db"),c?.use?.("user"),c?.use?.("downloads")].map(p=>Promise.resolve(p).catch(()=>null)));
-  if(dl){const b=$("#btn-csv");b.hidden=false;b.onclick=async()=>{try{await dl.save({filename:"repasse-inhire-asana.csv",data:csv()});toast("CSV pronto")}catch(e){toast("Download cancelado")}}}
+  if(dl){state.dl=dl;$("#btn-ccsv").onclick=async()=>{try{await dl.save({filename:"delta-universidades-contatos.csv",data:contactsCsv()});toast("CSV pronto")}catch(e){toast("Download cancelado")}};const b=$("#btn-csv");b.hidden=state.view==="unis";b.onclick=async()=>{try{await dl.save({filename:"repasse-inhire-asana.csv",data:csv()});toast("CSV pronto")}catch(e){toast("Download cancelado")}}}
   if(!db){$("#notice").textContent="Entre na sua conta Claude para ver e editar o quadro.";state.canWrite=false;["#btn-task","#btn-proj"].forEach(s=>$(s).disabled=true);render();return}
   state.db=db;
   if(user){try{const w=await user.can("data.write");if(w===false){state.canWrite=false;["#btn-task","#btn-proj"].forEach(s=>$(s).disabled=true)}}catch(e){}}
   $("#notice").textContent=state.canWrite?"Alterações ficam salvas e aparecem para todo mundo que abrir esta página.":"Você está no modo leitura.";
   db.collection("projects").onSnapshot(s=>{state.projects=s.docs.map(d=>({id:d.id,...d.data()}));syncFilters();render()},()=>{$("#notice").textContent="Não foi possível carregar os projetos. Recarregue a página."});
+  db.collection("contacts").onSnapshot(s=>{state.contacts=s.docs.map(d=>({id:d.id,...d.data()}));if(state.view==="unis")render()},()=>{});
   db.collection("tasks").onSnapshot(s=>{state.tasks=s.docs.map(d=>({id:d.id,...d.data()}));syncFilters();render()},()=>{$("#notice").textContent="Não foi possível carregar as tarefas. Recarregue a página."});
 })();
 </script>
